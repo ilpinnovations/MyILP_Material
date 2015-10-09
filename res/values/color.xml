@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryLightDark">#1E88E5</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#448AFF</color>
+    <color name="colorText">#222</color>
+    <color name="colorTextInverse">#fff</color>
+    <!-- Drawer List -->
+    <color name="colorDrawerBackground">#eee</color>
+    <color name="colorDrawerItemBackgroundActive">#F44336</color>
+    <color name="colorDrawerItemText">#111</color>
+    <color name="colorDrawerItemTextActive">#FFF</color>
+</resources>

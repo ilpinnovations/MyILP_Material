@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">My ILP</string>
+
+    <!-- Login Activity -->
+    <string name="location">Location</string>
+    <string name="login">Login</string>
+    <string name="welcomeToILP">Welcome to My ILP</string>
+
+    <!-- Hints -->
+    <string name="hint_name">Firstname Lastname</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_employeeId">Employee ID</string>
+    <string name="hint_batch">Batch</string>
+    <string name="hint_lg">Learning Group (LG)</string>
+
+    <!-- Drawer open close headers -->
+    <string name="opne">open</string>
+    <string name="close">close</string>
+
+    <!-- Titles -->
+    <string name="title_schedule">Schedule</string>
+    <string name="title_badges">Badges</string>
+    <string name="title_contacts">Emergency Contacts</string>
+    <string name="title_notification">Notifications</string>
+
+    <!-- Slot Item -->
+    <string name="slot">Slot :</string>
+    <string name="course">Course :</string>
+    <string name="faculty">Faculty :</string>
+    <string name="room">Room :</string>
+
+    <!-- Toast messages -->
+    <string name="toast_no_internet">No Internet connection</string>
+    <string name="toast_blank_lg">LG name cannot be empty</string>
+
+    <string-array name="locations">
+        <item name="trivandrum">Trivandrum</item>
+        <item name="chennai">Chennai</item>
+        <item name="guwahati">Guwahati</item>
+        <item name="hydrabad">Hydrabad</item>
+    </string-array>
+    <!-- Drawer option -->
+    <string name="drawer_options_schedule">Schedule</string>
+    <string name="drawer_options_notifications">Notifications</string>
+    <string name="drawer_options_badges">Badges</string>
+    <string name="drawer_options_contacts">Emergency Contacts</string>
+
+</resources>
