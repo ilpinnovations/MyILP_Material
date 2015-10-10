@@ -1,4 +1,4 @@
-package com.tcs.adapter;
+package com.ilp.ilpschedule.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,30 +6,34 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.tcs.model.Slot;
-import com.tcs.model.SlotViewHolder;
+import com.ilp.ilpschedule.model.Slot;
+import com.ilp.ilpschedule.model.SlotViewHolder;
 import com.tcs.myilp.R;
 
 public class ScheduleAdapter extends ArrayAdapter<Slot> {
 	private Context context;
 	private ArrayList<Slot> data;
 	private SlotViewHolder svh;
+	private OnClickListener callbackListner;
 
 	public ArrayList<Slot> getData() {
 		return data;
 	}
 
-	public ScheduleAdapter(Context context, ArrayList<Slot> objects) {
+	public ScheduleAdapter(Context context, ArrayList<Slot> objects,
+			OnClickListener callbackListner) {
 		super(context, R.layout.schedule_list_item, objects);
 		this.context = context;
 		if (objects == null)
 			data = new ArrayList<Slot>();
 		else
 			data = objects;
+		this.callbackListner = callbackListner;
 	}
 
 	public void setData(List<Slot> data) {
@@ -48,30 +52,28 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 					.inflate(R.layout.schedule_list_item, null);
 			svh = new SlotViewHolder();
-			svh.setSlotTitle((TextView) convertView
-					.findViewById(R.id.textViewSlotTitle));
+
 			svh.setSlotContent((TextView) convertView
 					.findViewById(R.id.textViewSlotContent));
-			svh.setCourseTitle((TextView) convertView
-					.findViewById(R.id.textViewCourseTitle));
+
 			svh.setCourseContent((TextView) convertView
 					.findViewById(R.id.textViewCourseContent));
-			svh.setFacultyTitle((TextView) convertView
-					.findViewById(R.id.textViewFacultyTitle));
+
 			svh.setFacultyContent((TextView) convertView
 					.findViewById(R.id.textViewFacultyContent));
-			svh.setRoomTitle((TextView) convertView
-					.findViewById(R.id.textViewRoomTitle));
+
 			svh.setRoomContent((TextView) convertView
 					.findViewById(R.id.textViewRoomContent));
+			//svh.setId()
 			convertView.setTag(svh);
 		}
 		Slot s = data.get(position);
 		svh = (SlotViewHolder) convertView.getTag();
-		svh.getSlotContent().setText(s.getSlot());
+		svh.getSlotContent().setText("Slot " + s.getSlot());
 		svh.getRoomContent().setText(s.getRoom());
 		svh.getCourseContent().setText(s.getCourse());
 		svh.getFacultyContent().setText(s.getFaculty());
+		convertView.setOnClickListener(callbackListner);
 		return convertView;
 	}
 }

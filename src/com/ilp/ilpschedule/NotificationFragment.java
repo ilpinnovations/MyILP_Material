@@ -1,9 +1,8 @@
-package com.tcs.myilp;
+package com.ilp.ilpschedule;
 
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Fragment;
@@ -19,10 +18,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.tcs.adapter.NotificationAdapter;
-import com.tcs.model.Notification;
-import com.tcs.util.Constants;
-import com.tcs.util.Util;
+import com.ilp.ilpschedule.adapter.NotificationAdapter;
+import com.ilp.ilpschedule.model.Notification;
+import com.ilp.ilpschedule.util.Constants;
+import com.ilp.ilpschedule.util.Util;
+import com.tcs.myilp.R;
 
 public class NotificationFragment extends Fragment {
 	public static final String TAG = "com.tcs.myilp.NotificationFragment";
@@ -73,8 +73,9 @@ public class NotificationFragment extends Fragment {
 					Notification n;
 					for (int i = 0; i < arr.length(); i++) {
 						obj = arr.getJSONObject(i);
-						n = new Notification(Notification.inputDateFormat.parse(obj
-								.getString("msg_date")),
+						n = new Notification(
+								Notification.inputDateFormat.parse(obj
+										.getString("msg_date")),
 								obj.getString("message"), obj.getInt("s_no"));
 						nots.add(n);
 						Log.d(TAG, n.toString());

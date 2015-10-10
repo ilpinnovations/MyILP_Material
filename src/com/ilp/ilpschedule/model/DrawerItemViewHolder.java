@@ -1,4 +1,4 @@
-package com.tcs.model;
+package com.ilp.ilpschedule.model;
 
 import android.widget.ImageView;
 import android.widget.TextView;

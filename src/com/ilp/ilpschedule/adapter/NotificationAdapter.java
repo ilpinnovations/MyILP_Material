@@ -1,4 +1,4 @@
-package com.tcs.adapter;
+package com.ilp.ilpschedule.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.tcs.model.Notification;
-import com.tcs.model.NotificationViewHolder;
+import com.ilp.ilpschedule.model.Notification;
+import com.ilp.ilpschedule.model.NotificationViewHolder;
 import com.tcs.myilp.R;
 
 public class NotificationAdapter extends ArrayAdapter<Notification> {

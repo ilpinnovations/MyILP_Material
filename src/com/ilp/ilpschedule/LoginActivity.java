@@ -1,4 +1,4 @@
-package com.tcs.myilp;
+package com.ilp.ilpschedule;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.tcs.model.Employee;
-import com.tcs.util.Constants;
-import com.tcs.util.Util;
+import com.ilp.ilpschedule.model.Employee;
+import com.ilp.ilpschedule.util.Constants;
+import com.ilp.ilpschedule.util.Util;
+import com.tcs.myilp.R;
 
 public class LoginActivity extends ActionBarActivity {
 	private Toolbar toolbar;

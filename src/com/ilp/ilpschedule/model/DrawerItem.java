@@ -1,4 +1,4 @@
-package com.tcs.model;
+package com.ilp.ilpschedule.model;
 
 public class DrawerItem {
 	private String text;

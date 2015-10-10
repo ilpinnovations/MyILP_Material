@@ -1,4 +1,4 @@
-package com.tcs.util;
+package com.ilp.ilpschedule.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -13,6 +13,7 @@ public interface Constants {
 	String QUESTIONMARK = "?";
 	String AND = "&";
 	String EQUALS = "=";
+	String CHARSET="UTF-8";
 	SimpleDateFormat paramsDateFormat = new SimpleDateFormat("yyyy-MM-dd",
 			Locale.US);
 
@@ -81,6 +82,13 @@ public interface Constants {
 			String URL = URL_BADGES + QUESTIONMARK;
 			String EMPID = "empid";
 			String BATCH = "batch";
+		}
+	}
+
+	public interface BUNDLE_KEYS {
+		public interface FEEDBACK_FRAGMENT {
+			String FACULTY = "faculty";
+			String COURSE = "course";
 		}
 	}
 }

@@ -3,5 +3,5 @@
     android:id="@+id/listViewNotification"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.tcs.myilp.MainActivity$PlaceholderFragment" >
+    tools:context="com.ilp.ilpschedule.MainActivity$PlaceholderFragment" >
 </ListView>

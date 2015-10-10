@@ -1,4 +1,4 @@
-package com.tcs.myilp;
+package com.ilp.ilpschedule;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,26 +12,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
-import com.tcs.adapter.DrawerAdapter;
-import com.tcs.model.DrawerItemViewHolder;
-import com.tcs.util.Util;
+import com.ilp.ilpschedule.adapter.DrawerAdapter;
+import com.ilp.ilpschedule.model.DrawerItemViewHolder;
+import com.ilp.ilpschedule.model.SlotViewHolder;
+import com.ilp.ilpschedule.util.Util;
+import com.tcs.myilp.R;
 
 public class MainActivity extends ActionBarActivity {
-	private static final String TAG = "MainActivity";
+	public static final String TAG = "MainActivity";
 	private Toolbar toolbar;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggler;
 	private DrawerLayout drawerLayout;
 	private DrawerAdapter drawerAdapter;
 	private String currentTitle;
-	private OnClickListener drawerItemClickListner = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			DrawerItemViewHolder dvh = (DrawerItemViewHolder) view.getTag();
-			drawerLayout.closeDrawers();
-			changeFragment(dvh.getTag());
-		}
-	};
+	private OnClickListener drawerItemClickListner;
+	private OnClickListener scheduleItemClickListner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 			drawerAdapter = new DrawerAdapter(getApplicationContext(),
 					R.layout.drawer_item,
 					Util.getDrawerItemList(getApplicationContext()),
-					drawerItemClickListner);
+					getDrawerItemClickListner());
 		if (drawerList == null) {
 			drawerList = (ListView) findViewById(R.id.listViewDrawerMenu);
 			drawerList.setAdapter(drawerAdapter);
@@ -98,7 +94,7 @@ public class MainActivity extends ActionBarActivity {
 		outState.putString("title", currentTitle);
 	}
 
-	private void changeFragment(String tag) {
+	private void changeFragment(String tag, Bundle bundle) {
 		Fragment fragment;
 		fragment = getFragmentManager().findFragmentByTag(tag);
 		if (fragment == null) {
@@ -119,9 +115,48 @@ public class MainActivity extends ActionBarActivity {
 				fragment = new NotificationFragment();
 				currentTitle = getString(R.string.title_notification);
 				break;
+			case FeedbackFragment.TAG:
+				fragment = new FeedbackFragment();
+				currentTitle = getString(R.string.title_feedback);
 			}
 		}
+		if (bundle != null)
+			fragment.setArguments(bundle);
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment, tag).commit();
+	}
+
+	public OnClickListener getScheduleClickListner() {
+		if (scheduleItemClickListner == null) {
+			scheduleItemClickListner = new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					SlotViewHolder svh = (SlotViewHolder) view.getTag();
+					Bundle bundle = new Bundle();
+					bundle.putCharSequence("faculty", svh.getFacultyContent()
+							.getText());
+					bundle.putCharSequence("course", svh.getCourseContent()
+							.getText());
+					bundle.putLong("slot_id", svh.getId());
+					changeFragment(FeedbackFragment.TAG, bundle);
+				}
+			};
+		}
+		return scheduleItemClickListner;
+	}
+
+	public OnClickListener getDrawerItemClickListner() {
+		if (drawerItemClickListner == null) {
+			drawerItemClickListner = new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					DrawerItemViewHolder dvh = (DrawerItemViewHolder) view
+							.getTag();
+					drawerLayout.closeDrawers();
+					changeFragment(dvh.getTag(), null);
+				}
+			};
+		}
+		return drawerItemClickListner;
 	}
 }

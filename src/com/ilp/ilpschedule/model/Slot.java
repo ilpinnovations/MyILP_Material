@@ -1,10 +1,16 @@
-package com.tcs.model;
+package com.ilp.ilpschedule.model;
+
+import java.sql.Date;
+
+import com.ilp.ilpschedule.util.Util;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Slot implements Parcelable {
-	private String slot, course, faculty, room;
+	private String slot, course, faculty, room, batch;
+	private Date date;
+	private long id;
 
 	public String getSlot() {
 		return slot;
@@ -89,4 +95,38 @@ public class Slot implements Parcelable {
 		dest.writeString(room);
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getBatch() {
+		return batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * check for valid values to insert into database
+	 * 
+	 * @return
+	 */
+	public boolean isValid() {
+		return Util.checkString(slot) && Util.checkString(course)
+				&& Util.checkString(faculty) && Util.checkString(room)
+				&& Util.checkString(batch);
+	}
 }

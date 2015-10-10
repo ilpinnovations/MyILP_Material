@@ -1,4 +1,4 @@
-package com.tcs.adapter;
+package com.ilp.ilpschedule.adapter;
 
 import java.util.ArrayList;
 
@@ -11,12 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tcs.model.DrawerItem;
-import com.tcs.model.DrawerItemViewHolder;
-import com.tcs.model.Employee;
+import com.ilp.ilpschedule.model.DrawerItem;
+import com.ilp.ilpschedule.model.DrawerItemViewHolder;
+import com.ilp.ilpschedule.model.Employee;
+import com.ilp.ilpschedule.util.Constants;
+import com.ilp.ilpschedule.util.Util;
 import com.tcs.myilp.R;
-import com.tcs.util.Constants;
-import com.tcs.util.Util;
 
 public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 	private Context context;

@@ -1,6 +1,6 @@
-package com.tcs.model;
+package com.ilp.ilpschedule.model;
 
-import com.tcs.util.Constants;
+import com.ilp.ilpschedule.util.Constants;
 
 public class Employee {
 	private long empId;

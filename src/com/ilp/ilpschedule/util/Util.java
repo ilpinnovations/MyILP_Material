@@ -1,6 +1,8 @@
-package com.tcs.util;
+package com.ilp.ilpschedule.util;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,13 +14,13 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.tcs.model.DrawerItem;
-import com.tcs.model.Employee;
-import com.tcs.myilp.BadgeFragment;
-import com.tcs.myilp.ContactFragment;
-import com.tcs.myilp.NotificationFragment;
+import com.ilp.ilpschedule.BadgeFragment;
+import com.ilp.ilpschedule.ContactFragment;
+import com.ilp.ilpschedule.NotificationFragment;
+import com.ilp.ilpschedule.ScheduleFragment;
+import com.ilp.ilpschedule.model.DrawerItem;
+import com.ilp.ilpschedule.model.Employee;
 import com.tcs.myilp.R;
-import com.tcs.myilp.ScheduleFragment;
 
 public class Util {
 	private static final String TAG = "Util";
@@ -175,8 +177,34 @@ public class Util {
 				&& progressDialog.isShowing()) {
 			progressDialog.dismiss();
 			WORK_IN_PROGRESS = !WORK_IN_PROGRESS;
-		}else{
-			
+		} else {
+
 		}
+	}
+
+	public static boolean checkString(String string) {
+		return string != null && string.trim().length() > 0;
+	}
+
+	public static String getUrlEncodedString(Map<String, String> parameters) {
+		StringBuilder strb = new StringBuilder();
+		try {
+			for (Map.Entry<String, String> entry : parameters.entrySet()) {
+				strb.append(
+						URLEncoder.encode(entry.getKey(), Constants.CHARSET))
+						.append(Constants.EQUALS)
+						.append(URLEncoder.encode(entry.getValue(),
+								Constants.CHARSET)).append(Constants.AND);
+			}
+			int length = strb.length();
+			if (length > 0) {
+				// remove extra & at end of string
+				strb.deleteCharAt(length - 1);
+			}
+		} catch (Exception ex) {
+			Log.d(TAG, "invalid parameters " + ex.getLocalizedMessage());
+			strb.setLength(0);
+		}
+		return strb.toString();
 	}
 }

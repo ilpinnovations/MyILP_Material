@@ -1,4 +1,4 @@
-package com.tcs.myilp;
+package com.ilp.ilpschedule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,10 +29,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.tcs.adapter.ScheduleAdapter;
-import com.tcs.model.Slot;
-import com.tcs.util.Constants;
-import com.tcs.util.Util;
+import com.ilp.ilpschedule.adapter.ScheduleAdapter;
+import com.ilp.ilpschedule.model.Slot;
+import com.ilp.ilpschedule.util.Constants;
+import com.ilp.ilpschedule.util.Util;
+import com.tcs.myilp.R;
 
 public class ScheduleFragment extends Fragment {
 	private TextView textViewdate;
@@ -46,7 +47,7 @@ public class ScheduleFragment extends Fragment {
 			"E, dd MMM yyyy", Locale.US);
 
 	RequestQueue reqQueue;
-	private OnDateSetListener dateSetLitner = new OnDateSetListener() {
+	private OnDateSetListener dateSetListner = new OnDateSetListener() {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
@@ -59,7 +60,7 @@ public class ScheduleFragment extends Fragment {
 	private OnClickListener dateChangeClickListner = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			new DatePickFragment(dateSetLitner).show(getFragmentManager(),
+			new DatePickFragment(dateSetListner).show(getFragmentManager(),
 					DatePickFragment.TAG);
 		}
 	};
@@ -125,7 +126,8 @@ public class ScheduleFragment extends Fragment {
 			Util.showProgressDialog(getActivity());
 			if (Util.hasInternetAccess(getActivity().getApplicationContext())) {
 				if (isDataValid()) {
-					String url = new StringBuilder(Constants.NETWORK_PARAMS.SCHEDULE.URL)
+					String url = new StringBuilder(
+							Constants.NETWORK_PARAMS.SCHEDULE.URL)
 							.append(Constants.NETWORK_PARAMS.SCHEDULE.BATCH)
 							.append(Constants.EQUALS)
 							.append(editTextLgName.getText().toString().trim()
@@ -185,7 +187,8 @@ public class ScheduleFragment extends Fragment {
 		}
 		if (scheduleAdapter == null) {
 			scheduleAdapter = new ScheduleAdapter(getActivity(),
-					new ArrayList<Slot>());
+					new ArrayList<Slot>(),
+					((MainActivity) getActivity()).getScheduleClickListner());
 		}
 		if (listViewSchedule == null) {
 			listViewSchedule = (ListView) rootView

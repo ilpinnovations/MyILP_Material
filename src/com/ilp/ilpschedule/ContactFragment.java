@@ -1,4 +1,6 @@
-package com.tcs.myilp;
+package com.ilp.ilpschedule;
+
+import com.tcs.myilp.R;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class BadgeFragment extends Fragment {
-	public static final String TAG = "com.tcs.myilp.BadgeFragment";
+public class ContactFragment extends Fragment {
+	public static final String TAG = "com.tcs.myilp.ContactFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -18,7 +20,7 @@ public class BadgeFragment extends Fragment {
 
 	@Override
 	public void onResume() {
-		getActivity().setTitle(R.string.title_badges);
+		getActivity().setTitle(R.string.title_contacts);
 		super.onResume();
 	}
 }

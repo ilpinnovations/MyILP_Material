@@ -1,4 +1,4 @@
-package com.tcs.model;
+package com.ilp.ilpschedule.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

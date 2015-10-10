@@ -6,6 +6,7 @@
     <!-- Login Activity -->
     <string name="location">Location</string>
     <string name="login">Login</string>
+    <string name="send">Send</string>
     <string name="welcomeToILP">Welcome to My ILP</string>
 
     <!-- Hints -->
@@ -13,6 +14,9 @@
     <string name="hint_email">Email</string>
     <string name="hint_employeeId">Employee ID</string>
     <string name="hint_batch">Batch</string>
+    <string name="hint_faculty">Faculty</string>
+    <string name="hint_course">Course</string>
+    <string name="hint_comment">Comment</string>
     <string name="hint_lg">Learning Group (LG)</string>
 
     <!-- Drawer open close headers -->
@@ -22,14 +26,15 @@
     <!-- Titles -->
     <string name="title_schedule">Schedule</string>
     <string name="title_badges">Badges</string>
+    <string name="title_feedback">Feedback</string>
     <string name="title_contacts">Emergency Contacts</string>
     <string name="title_notification">Notifications</string>
 
     <!-- Slot Item -->
-    <string name="slot">Slot :</string>
-    <string name="course">Course :</string>
-    <string name="faculty">Faculty :</string>
-    <string name="room">Room :</string>
+    <string name="slot_item_slot">Slot :</string>
+    <string name="slot_item_course">Course :</string>
+    <string name="slot_item_faculty">Faculty :</string>
+    <string name="slot_item_room">Room :</string>
 
     <!-- Toast messages -->
     <string name="toast_no_internet">No Internet connection</string>
