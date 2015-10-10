@@ -64,7 +64,7 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 
 			svh.setRoomContent((TextView) convertView
 					.findViewById(R.id.textViewRoomContent));
-			//svh.setId()
+			svh.setId(data.get(position).getId());
 			convertView.setTag(svh);
 		}
 		Slot s = data.get(position);
@@ -73,6 +73,7 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 		svh.getRoomContent().setText(s.getRoom());
 		svh.getCourseContent().setText(s.getCourse());
 		svh.getFacultyContent().setText(s.getFaculty());
+		svh.setId(data.get(position).getId());
 		convertView.setOnClickListener(callbackListner);
 		return convertView;
 	}

@@ -9,9 +9,14 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,16 +40,32 @@ public class NotificationFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_notification,
 				container, false);
 
-		if (notificationAdapter == null)
-			notificationAdapter = new NotificationAdapter(getActivity()
-					.getApplicationContext(), new ArrayList<Notification>());
+		notificationAdapter = new NotificationAdapter(getActivity()
+				.getApplicationContext(), new ArrayList<Notification>());
 
-		if (notificationList == null) {
-			notificationList = (ListView) rootView
-					.findViewById(R.id.listViewNotification);
-			notificationList.setAdapter(notificationAdapter);
-		}
+		notificationList = (ListView) rootView
+				.findViewById(R.id.listViewNotification);
+		notificationList.setAdapter(notificationAdapter);
+		notificationList.setEmptyView((TextView) rootView
+				.findViewById(R.id.textViewNotificationEmptyView));
+		setHasOptionsMenu(true);
 		return rootView;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.notification_menu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_refresh) {
+			fetchNotifications();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -100,11 +121,18 @@ public class NotificationFragment extends Fragment {
 	};
 
 	private void fetchNotifications() {
-		Util.showProgressDialog(getActivity());
-		if (requestQueue == null)
-			requestQueue = Volley.newRequestQueue(getActivity());
-		StringRequest request = new StringRequest(Constants.URL_NOTIFICATION,
-				requestSuccessListner, requestErrorListner);
-		requestQueue.add(request);
+		if (Util.hasInternetAccess(getActivity())) {
+			Util.showProgressDialog(getActivity());
+			if (requestQueue == null)
+				requestQueue = Volley.newRequestQueue(getActivity());
+			StringRequest request = new StringRequest(
+					Constants.URL_NOTIFICATION, requestSuccessListner,
+					requestErrorListner);
+			requestQueue.add(request);
+		} else {
+			Toast.makeText(getActivity(),
+					getString(R.string.toast_no_internet), Toast.LENGTH_SHORT)
+					.show();
+		}
 	}
 }

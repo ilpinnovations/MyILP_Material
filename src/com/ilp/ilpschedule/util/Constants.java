@@ -10,10 +10,11 @@ public interface Constants {
 	String URL_NOTIFICATION = URL_BASE + "notify_json.php";
 	String URL_SCHEDULE = URL_BASE + "schedulelist_json.php";
 	String URL_CONTACTS = URL_BASE + "getEmergencyContacts.php";
+	String URL_FEEDBACK = URL_BASE + "feedback_json.php";
 	String QUESTIONMARK = "?";
 	String AND = "&";
 	String EQUALS = "=";
-	String CHARSET="UTF-8";
+	String CHARSET = "UTF-8";
 	SimpleDateFormat paramsDateFormat = new SimpleDateFormat("yyyy-MM-dd",
 			Locale.US);
 
@@ -83,12 +84,26 @@ public interface Constants {
 			String EMPID = "empid";
 			String BATCH = "batch";
 		}
+
+		public interface FEEDBACK {
+			String FACULTY = "faculty";
+			String COURSE = "course";
+			String COMMENT = "comment";
+			String RATE = "rate";
+			String EMP_ID = "empid";
+			String EMP_NAME = "empname";
+			String EMP_LOC = "emploc";
+			String EMP_BATCH = "empbatch";
+			String SLOT = "slot";
+			String DATE = "date";
+		}
 	}
 
 	public interface BUNDLE_KEYS {
 		public interface FEEDBACK_FRAGMENT {
 			String FACULTY = "faculty";
 			String COURSE = "course";
+			String SLOT_ID = "slot_id";
 		}
 	}
 }

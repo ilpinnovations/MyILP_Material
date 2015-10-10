@@ -2,10 +2,11 @@ package com.ilp.ilpschedule.model;
 
 import java.sql.Date;
 
-import com.ilp.ilpschedule.util.Util;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.ilp.ilpschedule.util.Util;
 
 public class Slot implements Parcelable {
 	private String slot, course, faculty, room, batch;
@@ -47,7 +48,8 @@ public class Slot implements Parcelable {
 	@Override
 	public String toString() {
 		return "Slot [slot=" + slot + ", course=" + course + ", faculty="
-				+ faculty + ", room=" + room + "]";
+				+ faculty + ", room=" + room + ", batch=" + batch + ", date="
+				+ date + ", id=" + id + "]";
 	}
 
 	public Slot(String slot, String course, String faculty, String room) {
@@ -81,6 +83,7 @@ public class Slot implements Parcelable {
 			return new Slot[size];
 		}
 	};
+	private static final String TAG = "Slot";
 
 	@Override
 	public int describeContents() {
@@ -125,8 +128,13 @@ public class Slot implements Parcelable {
 	 * @return
 	 */
 	public boolean isValid() {
-		return Util.checkString(slot) && Util.checkString(course)
+		boolean valid = Util.checkString(slot) && Util.checkString(course)
 				&& Util.checkString(faculty) && Util.checkString(room)
 				&& Util.checkString(batch);
+		if (valid)
+			Log.d(TAG, "slot valid");
+		else
+			Log.d(TAG, "slot invalid");
+		return valid;
 	}
 }

@@ -1,6 +1,7 @@
 package com.ilp.ilpschedule;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import com.ilp.ilpschedule.adapter.DrawerAdapter;
 import com.ilp.ilpschedule.model.DrawerItemViewHolder;
 import com.ilp.ilpschedule.model.SlotViewHolder;
+import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
 import com.tcs.myilp.R;
 
@@ -34,8 +36,10 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new ScheduleFragment()).commit();
+			getFragmentManager()
+					.beginTransaction()
+					.add(R.id.container, new ScheduleFragment(),
+							ScheduleFragment.TAG).commit();
 			currentTitle = getString(R.string.title_schedule);
 		} else {
 			currentTitle = savedInstanceState.getString("title");
@@ -74,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		drawerLayout.setDrawerListener(drawerToggler);
 		drawerToggler.syncState();
-
+		Util.resetProgressDialog();
 	}
 
 	@Override
@@ -118,12 +122,25 @@ public class MainActivity extends ActionBarActivity {
 			case FeedbackFragment.TAG:
 				fragment = new FeedbackFragment();
 				currentTitle = getString(R.string.title_feedback);
+				break;
+			case LocationFragment.TAG:
+				fragment = new LocationFragment();
+				currentTitle = getString(R.string.title_location);
+				break;
 			}
+			if (bundle != null)
+				fragment.setArguments(bundle);
 		}
-		if (bundle != null)
-			fragment.setArguments(bundle);
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, tag).commit();
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction().replace(R.id.container, fragment, tag);
+		fragmentTransaction.addToBackStack(tag);
+		fragmentTransaction.commit();
+	}
+
+	@Override
+	public void setTitle(CharSequence title) {
+		currentTitle = title.toString();
+		super.setTitle(title);
 	}
 
 	public OnClickListener getScheduleClickListner() {
@@ -133,11 +150,15 @@ public class MainActivity extends ActionBarActivity {
 				public void onClick(View view) {
 					SlotViewHolder svh = (SlotViewHolder) view.getTag();
 					Bundle bundle = new Bundle();
-					bundle.putCharSequence("faculty", svh.getFacultyContent()
-							.getText());
-					bundle.putCharSequence("course", svh.getCourseContent()
-							.getText());
-					bundle.putLong("slot_id", svh.getId());
+					bundle.putCharSequence(
+							Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.FACULTY,
+							svh.getFacultyContent().getText());
+					bundle.putCharSequence(
+							Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.COURSE, svh
+									.getCourseContent().getText());
+					bundle.putLong(
+							Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.SLOT_ID,
+							svh.getId());
 					changeFragment(FeedbackFragment.TAG, bundle);
 				}
 			};

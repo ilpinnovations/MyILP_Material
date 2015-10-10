@@ -2,13 +2,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ilp.ilpschedule.MainActivity$PlaceholderFragment" >
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_normal" >
+
+        <ImageView
+            android:id="@+id/imageViewBadgesAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/padding_low"
+            android:src="@drawable/ic_contact" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewBadgesPoints"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_low"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textViewBadgesDesc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_low"
+                android:text="Welcome badges" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViewBadges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewBadgesEmptyView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_high"
-        android:text="Welcome home" />
+        android:text="Welcome badges" />
 
 </LinearLayout>

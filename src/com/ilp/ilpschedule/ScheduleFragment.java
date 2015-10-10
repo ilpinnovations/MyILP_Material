@@ -1,10 +1,13 @@
 package com.ilp.ilpschedule;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ilp.ilpschedule.adapter.ScheduleAdapter;
+import com.ilp.ilpschedule.db.DbHelper;
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
@@ -39,29 +44,35 @@ public class ScheduleFragment extends Fragment {
 	private TextView textViewdate;
 	private EditText editTextLgName;
 	private Date date;
+	private String lgName;
 	private ListView listViewSchedule;
 	private ScheduleAdapter scheduleAdapter;
 	private ImageButton changeDate, getSchedule;
 	public static final String TAG = "com.tcs.myilp.ScheduleFragment";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"E, dd MMM yyyy", Locale.US);
-
-	RequestQueue reqQueue;
+	private RequestQueue reqQueue;
 	private OnDateSetListener dateSetListner = new OnDateSetListener() {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
-			Calendar cal = Calendar.getInstance();
-			cal.set(year, monthOfYear, dayOfMonth);
-			date = cal.getTime();
+			String dateStr = String.valueOf(year)
+					+ "-"
+					+ (monthOfYear < 9 ? "0" + String.valueOf(monthOfYear + 1)
+							: String.valueOf(monthOfYear + 1))
+					+ "-"
+					+ (dayOfMonth < 9 ? "0" + String.valueOf(dayOfMonth)
+							: String.valueOf(dayOfMonth));
+			Log.d(TAG, dateStr);
+			date = Date.valueOf(dateStr);
 			textViewdate.setText(dateFormat.format(date));
 		}
 	};
 	private OnClickListener dateChangeClickListner = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			new DatePickFragment(dateSetListner).show(getFragmentManager(),
-					DatePickFragment.TAG);
+			new DatePickFragment(dateSetListner, date).show(
+					getFragmentManager(), DatePickFragment.TAG);
 		}
 	};
 	private Response.Listener<String> schedulerTaskSuccessListner = new Response.Listener<String>() {
@@ -69,6 +80,7 @@ public class ScheduleFragment extends Fragment {
 		@Override
 		public void onResponse(String response) {
 			try {
+				Log.d(TAG, "got some data from server");
 				JSONObject jobj = new JSONObject(response);
 				if (jobj.has("Android")) {
 					JSONArray jarr = jobj.getJSONArray("Android");
@@ -87,15 +99,23 @@ public class ScheduleFragment extends Fragment {
 								s.setRoom(obj.getString("room"));
 							if (obj.has("slot"))
 								s.setSlot(obj.getString("slot"));
+							if (obj.has("batch"))
+								s.setBatch(obj.getString("batch"));
+							if (obj.has("date1"))
+								s.setDate(Date.valueOf(obj.getString("date1")));
 							data.add(s);
 							System.out.println(s);
 						}
+						DbHelper dbh = new DbHelper(getActivity());
+						dbh.addSlots(data);
 						((ScheduleAdapter) listViewSchedule.getAdapter())
-								.setData(data);
+								.setData(dbh.getSchedule(date, editTextLgName
+										.getText().toString().trim()
+										.toUpperCase(Locale.US)));
 					} else {
 						// no schdule
 						Util.toast(getActivity().getApplicationContext(),
-								"No Schedule available");
+								getString(R.string.toast_no_schedule));
 					}
 				}
 
@@ -119,91 +139,111 @@ public class ScheduleFragment extends Fragment {
 		}
 
 	};
+
+	private RequestQueue getRequestQueue() {
+		if (reqQueue == null)
+			reqQueue = Volley.newRequestQueue(getActivity());
+		return reqQueue;
+	}
+
 	private OnClickListener getScheduleClickListner = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Util.hideKeyboard(getActivity());
 			Util.showProgressDialog(getActivity());
-			if (Util.hasInternetAccess(getActivity().getApplicationContext())) {
-				if (isDataValid()) {
-					String url = new StringBuilder(
-							Constants.NETWORK_PARAMS.SCHEDULE.URL)
-							.append(Constants.NETWORK_PARAMS.SCHEDULE.BATCH)
-							.append(Constants.EQUALS)
-							.append(editTextLgName.getText().toString().trim()
-									.toUpperCase(Locale.US))
-							.append(Constants.AND)
-							.append(Constants.NETWORK_PARAMS.SCHEDULE.DATE)
-							.append(Constants.EQUALS)
-							.append(Constants.paramsDateFormat.format(date))
-							.toString();
-					if (reqQueue == null)
-						reqQueue = Volley.newRequestQueue(getActivity());
-					StringRequest request = new StringRequest(url,
-							schedulerTaskSuccessListner,
-							schedulerTaskErrorListner);
-					request.setTag(1);
-					reqQueue.cancelAll(1);
-					reqQueue.add(request);
+			if (isDataValid()) {
+				// check data in db then do n/w operation
+				String batch = editTextLgName.getText().toString().trim()
+						.toUpperCase(Locale.US);
+				List<Slot> schedule = new DbHelper(getActivity()).getSchedule(
+						date, batch);
+				if (schedule.size() == 0) {
+					// no data in db check for server
+					Log.d(TAG, "no data in db check for server");
+					if (Util.hasInternetAccess(getActivity())) {
+						Map<String, String> params = new HashMap<>();
+						params.put(Constants.NETWORK_PARAMS.SCHEDULE.BATCH,
+								batch);
+						params.put(Constants.NETWORK_PARAMS.SCHEDULE.DATE,
+								Constants.paramsDateFormat.format(date));
+						String url = new StringBuilder(
+								Constants.NETWORK_PARAMS.SCHEDULE.URL).append(
+								Util.getUrlEncodedString(params)).toString();
+
+						StringRequest request = new StringRequest(url,
+								schedulerTaskSuccessListner,
+								schedulerTaskErrorListner);
+						request.setTag(1);
+						getRequestQueue().cancelAll(1);
+						getRequestQueue().add(request);
+					} else {
+						Util.toast(getActivity().getApplicationContext(),
+								getString(R.string.toast_no_internet));
+						Util.hideProgressDialog(getActivity());
+					}
 				} else {
-					Util.toast(getActivity().getApplicationContext(),
-							getString(R.string.toast_blank_lg));
+					// we got some data from db
+					Log.d(TAG, "we got some data from db");
+					((ScheduleAdapter) listViewSchedule.getAdapter())
+							.setData(schedule);
 					Util.hideProgressDialog(getActivity());
 				}
 			} else {
 				Util.toast(getActivity().getApplicationContext(),
-						getString(R.string.toast_no_internet));
+						getString(R.string.toast_blank_lg));
 				Util.hideProgressDialog(getActivity());
 			}
+
 		}
 	};
+
+	public ScheduleFragment() {
+		date = new Date(Calendar.getInstance().getTimeInMillis());
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container,
 				false);
-		if (date == null)
-			date = Calendar.getInstance().getTime();
-		if (textViewdate == null) {
-			textViewdate = (TextView) rootView
-					.findViewById(R.id.textViewScheduleDate);
-			textViewdate.setText(dateFormat.format(date));
-		}
-		if (editTextLgName == null) {
-			editTextLgName = (EditText) rootView
-					.findViewById(R.id.editTextLgName);
-			editTextLgName.setText(Util.getEmployee(getActivity()).getLg());
-		}
-		if (changeDate == null) {
-			changeDate = (ImageButton) rootView
-					.findViewById(R.id.imageButtonChangeDate);
-			changeDate.setOnClickListener(dateChangeClickListner);
-		}
-		if (getSchedule == null) {
-			getSchedule = (ImageButton) rootView
-					.findViewById(R.id.imageButtonGetSchedule);
-			getSchedule.setOnClickListener(getScheduleClickListner);
-		}
-		if (scheduleAdapter == null) {
+
+		textViewdate = (TextView) rootView
+				.findViewById(R.id.textViewScheduleDate);
+
+		editTextLgName = (EditText) rootView.findViewById(R.id.editTextLgName);
+		if (lgName == null)
+			lgName = Util.getEmployee(getActivity()).getLg();
+
+		changeDate = (ImageButton) rootView
+				.findViewById(R.id.imageButtonChangeDate);
+
+		changeDate.setOnClickListener(dateChangeClickListner);
+
+		getSchedule = (ImageButton) rootView
+				.findViewById(R.id.imageButtonGetSchedule);
+
+		getSchedule.setOnClickListener(getScheduleClickListner);
+
+		if (scheduleAdapter == null)
 			scheduleAdapter = new ScheduleAdapter(getActivity(),
 					new ArrayList<Slot>(),
 					((MainActivity) getActivity()).getScheduleClickListner());
-		}
-		if (listViewSchedule == null) {
-			listViewSchedule = (ListView) rootView
-					.findViewById(R.id.listViewSchedule);
-			listViewSchedule.setEmptyView(rootView
-					.findViewById(R.id.textViewScheduleEmptyView));
-			listViewSchedule.setAdapter(scheduleAdapter);
-			Log.d(TAG, "list view set");
-		}
 
+		listViewSchedule = (ListView) rootView
+				.findViewById(R.id.listViewSchedule);
+		listViewSchedule.setEmptyView(rootView
+				.findViewById(R.id.textViewScheduleEmptyView));
+		listViewSchedule.setAdapter(scheduleAdapter);
 		if (savedInstanceState != null) {
 			ArrayList<Slot> data = savedInstanceState
 					.getParcelableArrayList("schedules");
 			scheduleAdapter.setData(data);
+			lgName = savedInstanceState.getString("lgName");
+			date = new Date(savedInstanceState.getLong("date"));
 		}
+		textViewdate.setText(dateFormat.format(date));
+		editTextLgName.setText(lgName);
 		return rootView;
 	}
 
@@ -214,7 +254,7 @@ public class ScheduleFragment extends Fragment {
 			return true;
 		} else {
 			Util.toast(getActivity().getApplicationContext(),
-					"LG Name should not be empty");
+					getString(R.string.toast_blank_lg));
 
 			return false;
 		}
@@ -229,9 +269,18 @@ public class ScheduleFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+
 		ArrayList<Slot> values = scheduleAdapter.getData();
 		outState.putParcelableArrayList("schedules", values);
+		outState.putString("lgName", lgName);
+		outState.putLong("date", date.getTime());
+	}
 
+	@Override
+	public void onDestroy() {
+		Toast.makeText(getActivity(), "schedule fragment destroyed",
+				Toast.LENGTH_SHORT).show();
+		super.onDestroy();
 	}
 
 }

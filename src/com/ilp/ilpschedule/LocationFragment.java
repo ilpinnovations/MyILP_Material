@@ -8,19 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ContactFragment extends Fragment {
-	public static final String TAG = "com.tcs.myilp.ContactFragment";
+public class LocationFragment extends Fragment {
+	public static final String TAG = "com.ilp.ilpschedule.LocationFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		return inflater.inflate(R.layout.fragment_contact, container, false);
+		return inflater.inflate(R.layout.fragment_location, container, false);
 	}
 
 	@Override
 	public void onResume() {
-		getActivity().setTitle(R.string.title_contacts);
+		getActivity().setTitle(
+				R.string.title_location);
 		super.onResume();
 	}
 }

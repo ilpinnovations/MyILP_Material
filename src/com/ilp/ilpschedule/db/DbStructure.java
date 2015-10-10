@@ -108,8 +108,8 @@ public class DbStructure {
 				.append(DbConstants.TYPE_TEXT).append(DbConstants.COMMA)
 				.append(COLUMN_RATING).append(DbConstants.TYPE_INT)
 				.append(DbConstants.COMMA).append(COLUMN_SLOT_REF)
-				.append(DbConstants.TYPE_INT).append(DbConstants.BRACES_CLOSE)
-				.toString();
+				.append(DbConstants.TYPE_INT).append(DbConstants.UNIQUE)
+				.append(DbConstants.BRACES_CLOSE).toString();
 		public static final String COMMAND_DROP = new StringBuilder(
 				DbConstants.DROP_TABLE).append(TABLE_NAME).toString();
 	}

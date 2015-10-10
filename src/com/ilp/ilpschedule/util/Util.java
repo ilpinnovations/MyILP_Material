@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.ilp.ilpschedule.BadgeFragment;
 import com.ilp.ilpschedule.ContactFragment;
+import com.ilp.ilpschedule.LocationFragment;
 import com.ilp.ilpschedule.NotificationFragment;
 import com.ilp.ilpschedule.ScheduleFragment;
 import com.ilp.ilpschedule.model.DrawerItem;
@@ -115,18 +116,20 @@ public class Util {
 		Log.d(TAG, " in Util");
 		ArrayList<DrawerItem> data = new ArrayList<>();
 		int[] ICONS = { R.drawable.ic_schedule, R.drawable.ic_notification,
-				R.drawable.ic_badge, R.drawable.ic_contact };
+				R.drawable.ic_badge, R.drawable.ic_location,
+				R.drawable.ic_contact };
 		int[] ACTIVE_ICONS = { R.drawable.ic_schedule_active,
 				R.drawable.ic_notification_active, R.drawable.ic_badge_active,
-				R.drawable.ic_contact_active };
+				R.drawable.ic_location_active, R.drawable.ic_contact_active };
 		int[] OPTIONS = { R.string.drawer_options_schedule,
 				R.string.drawer_options_notifications,
 				R.string.drawer_options_badges,
+				R.string.drawer_options_locations,
 				R.string.drawer_options_contacts };
 		String[] TAGS = { ScheduleFragment.TAG, NotificationFragment.TAG,
-				BadgeFragment.TAG, ContactFragment.TAG };
+				BadgeFragment.TAG,LocationFragment.TAG, ContactFragment.TAG };
 		data.add(new DrawerItem(Constants.DRAWER_ITEM_TYPE.HEADER));
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			data.add(new DrawerItem(context.getString(OPTIONS[i]), ICONS[i],
 					ACTIVE_ICONS[i], Constants.DRAWER_ITEM_TYPE.OPTION, TAGS[i]));
 		}
@@ -156,17 +159,24 @@ public class Util {
 	private static ProgressDialog progressDialog;
 	private static boolean WORK_IN_PROGRESS = false;
 
+	public static void resetProgressDialog() {
+		progressDialog = null;
+	}
+
 	public static ProgressDialog getProgressDialog(Activity activity) {
-		progressDialog = new ProgressDialog(activity);
-		progressDialog.setOwnerActivity(activity);
-		progressDialog.setIndeterminate(true);
-		progressDialog.setMessage("Please wait..");
-		progressDialog.setCancelable(false);
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(activity);
+			progressDialog.setOwnerActivity(activity);
+			progressDialog.setIndeterminate(true);
+
+			progressDialog.setCancelable(false);
+		}
 		return progressDialog;
 	}
 
 	public static void showProgressDialog(Activity activity) {
 		if (!WORK_IN_PROGRESS) {
+			getProgressDialog(activity).setMessage("Please wait..");
 			getProgressDialog(activity).show();
 			WORK_IN_PROGRESS = !WORK_IN_PROGRESS;
 		}
@@ -179,6 +189,13 @@ public class Util {
 			WORK_IN_PROGRESS = !WORK_IN_PROGRESS;
 		} else {
 
+		}
+	}
+
+	public static void setProgressMessage(String message) {
+		if (WORK_IN_PROGRESS && progressDialog != null
+				&& progressDialog.isShowing()) {
+			progressDialog.setMessage(message);
 		}
 	}
 

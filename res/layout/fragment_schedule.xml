@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/padding_high"
-        android:text="No Schedule"
+        android:text="@string/list_empty_schedule"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

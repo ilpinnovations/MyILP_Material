@@ -8,7 +8,7 @@ public final class DbConstants {
 	public static final String BRACES_CLOSE=") ";
 	public static final String SEMICOLON=";";
 	public static final String AND=" AND ";
-	public static final String QUESTION_MARK=" ?";
+	public static final String QUESTION_MARK="?";
 	public static final String TYPE_TEXT=" TEXT";
 	public static final String TYPE_INT=" INTEGER";
 	public static final String TYPE_REAL=" REAL";

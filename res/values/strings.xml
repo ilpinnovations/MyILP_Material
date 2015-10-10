@@ -2,6 +2,11 @@
 <resources>
 
     <string name="app_name">My ILP</string>
+    <string name="list_empty_notification">No notifications</string>
+    <string name="list_empty_schedule">No schedule</string>
+    <string name="list_empty_contacts">No Contacts</string>
+    <!-- Menu -->
+    <string name="action_refresh">Refresh</string>
 
     <!-- Login Activity -->
     <string name="location">Location</string>
@@ -27,6 +32,7 @@
     <string name="title_schedule">Schedule</string>
     <string name="title_badges">Badges</string>
     <string name="title_feedback">Feedback</string>
+    <string name="title_location">Location</string>
     <string name="title_contacts">Emergency Contacts</string>
     <string name="title_notification">Notifications</string>
 
@@ -38,7 +44,10 @@
 
     <!-- Toast messages -->
     <string name="toast_no_internet">No Internet connection</string>
+    <string name="toast_no_schedule">No schedule available</string>
     <string name="toast_blank_lg">LG name cannot be empty</string>
+    <string name="toast_feedback_success">Feedback submitted successfully, Thank you</string>
+    <string name="toast_feedback_fail">Feedback cannot be submitted, Try again!</string>
 
     <string-array name="locations">
         <item name="trivandrum">Trivandrum</item>
@@ -46,10 +55,12 @@
         <item name="guwahati">Guwahati</item>
         <item name="hydrabad">Hydrabad</item>
     </string-array>
+
     <!-- Drawer option -->
     <string name="drawer_options_schedule">Schedule</string>
     <string name="drawer_options_notifications">Notifications</string>
     <string name="drawer_options_badges">Badges</string>
+    <string name="drawer_options_locations">Locations</string>
     <string name="drawer_options_contacts">Emergency Contacts</string>
 
 </resources>
