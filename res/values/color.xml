@@ -7,9 +7,20 @@
     <color name="colorAccent">#448AFF</color>
     <color name="colorText">#222</color>
     <color name="colorTextInverse">#fff</color>
+
     <!-- Drawer List -->
     <color name="colorDrawerBackground">#eee</color>
     <color name="colorDrawerItemBackgroundActive">#F44336</color>
     <color name="colorDrawerItemText">#111</color>
     <color name="colorDrawerItemTextActive">#FFF</color>
-</resources>
+
+    <!-- contact list color sets -->
+    <color name="color_set_a">#F44336</color>
+    <color name="color_set_b">#9C27B0</color>
+    <color name="color_set_c">#FF5722</color>
+    <color name="color_set_d">#2196F3</color>
+    
+    <!-- Badge header -->
+    <color name="color_badge_header">#E91E63</color>
+
+</resources>

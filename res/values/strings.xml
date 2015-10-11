@@ -5,8 +5,27 @@
     <string name="list_empty_notification">No notifications</string>
     <string name="list_empty_schedule">No schedule</string>
     <string name="list_empty_contacts">No Contacts</string>
+    <string name="list_empty_badges">Leaderboard is empty</string>
+    <!-- General -->
+
+
+    <!-- Badges -->
+    <string name="badge_karma_warrior">Congratulations!\nYou won the Feedback Karma Warrior badge.\nYou earn </string>
+    <string name="badge_karma_empower">Congratulations!\nYou won the Feedback Karma Empower badge.\nYou earn </string>
+    <string name="badge_karma_leader">Congratulations!\nYou won the Feedback Karma Leader badge.\nYou earn </string>
+    <string name="badge_karma_king">Congratulations!\nYou won the Feedback Karma king badge.\nYou earn </string>
+    <string name="badge_points">points</string>
+    <string name="badge_item_points">Points: </string>
+    <string name="badge_you_need">You need </string>
+    <string name="badge_you_earn">You earn </string>
+    <string name="badge_more_for_warrior"> points more to win the Feedback Karma Warrior badge.</string>
+    <string name="badge_more_for_empower"> points more to win the Feedback Karma Empower badge.</string>
+    <string name="badge_more_for_leader"> points more to win the Feedback Karma Leader badge.</string>
+    <string name="badge_more_for_king"> points more to win the Feedback Karma King badge.</string>
+    
     <!-- Menu -->
     <string name="action_refresh">Refresh</string>
+    <string name="action_logout">Logout</string>
 
     <!-- Login Activity -->
     <string name="location">Location</string>

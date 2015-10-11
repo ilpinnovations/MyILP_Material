@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/action_notification_refresh"
+        android:id="@+id/action_contact_refresh"
         android:title="@string/action_refresh"/>
 
 </menu>

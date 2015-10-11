@@ -62,7 +62,7 @@
         android:id="@+id/listViewSchedule"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="2dp" >
+        android:dividerHeight="@dimen/list_divider_height" >
     </ListView>
 
     <TextView

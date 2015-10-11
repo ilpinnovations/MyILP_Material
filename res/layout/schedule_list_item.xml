@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_normal"
-    android:orientation="vertical"
-    android:padding="@dimen/padding_normal" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -17,8 +15,7 @@
             android:id="@+id/textViewSlotTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_slot"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/slot_item_slot" />
 
         <TextView
             android:id="@+id/textViewSlotContent"
@@ -26,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="A"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorText" />
     </LinearLayout>
 
@@ -41,8 +37,7 @@
             android:id="@+id/textViewCourseTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_course"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/slot_item_course" />
 
         <TextView
             android:id="@+id/textViewCourseContent"
@@ -50,7 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="Javascript n all"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorText" />
     </LinearLayout>
 
@@ -65,8 +59,7 @@
             android:id="@+id/textViewFacultyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_faculty"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/slot_item_faculty" />
 
         <TextView
             android:id="@+id/textViewFacultyContent"
@@ -74,7 +67,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="Sridevi D V"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorText" />
     </LinearLayout>
 
@@ -89,8 +81,7 @@
             android:id="@+id/textViewRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_room"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/slot_item_room" />
 
         <TextView
             android:id="@+id/textViewRoomContent"
@@ -98,7 +89,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="CR5"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorText" />
     </LinearLayout>
 

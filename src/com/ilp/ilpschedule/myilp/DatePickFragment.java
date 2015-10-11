@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule;
+package com.ilp.ilpschedule.myilp;
 
 import java.sql.Date;
 import java.util.Calendar;

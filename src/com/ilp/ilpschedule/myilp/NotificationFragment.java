@@ -1,6 +1,7 @@
-package com.ilp.ilpschedule;
+package com.ilp.ilpschedule.myilp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,10 +24,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ilp.ilpschedule.adapter.NotificationAdapter;
+import com.ilp.ilpschedule.db.DbHelper;
 import com.ilp.ilpschedule.model.Notification;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
-import com.tcs.myilp.R;
 
 public class NotificationFragment extends Fragment {
 	public static final String TAG = "com.tcs.myilp.NotificationFragment";
@@ -39,10 +39,9 @@ public class NotificationFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_notification,
 				container, false);
-
-		notificationAdapter = new NotificationAdapter(getActivity()
-				.getApplicationContext(), new ArrayList<Notification>());
-
+		if (notificationAdapter == null)
+			notificationAdapter = new NotificationAdapter(getActivity()
+					.getApplicationContext(), new ArrayList<Notification>());
 		notificationList = (ListView) rootView
 				.findViewById(R.id.listViewNotification);
 		notificationList.setAdapter(notificationAdapter);
@@ -61,7 +60,7 @@ public class NotificationFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_refresh) {
+		if (id == R.id.action_notification_refresh) {
 			fetchNotifications();
 			return true;
 		}
@@ -76,7 +75,9 @@ public class NotificationFragment extends Fragment {
 
 	@Override
 	public void onStart() {
-		fetchNotifications();
+		if (notificationAdapter != null)
+			notificationAdapter.addData(new DbHelper(getActivity())
+					.getNotifications());
 		super.onStart();
 	}
 
@@ -86,7 +87,7 @@ public class NotificationFragment extends Fragment {
 		@Override
 		public void onResponse(String result) {
 			Log.d(TAG, result);
-			ArrayList<Notification> nots = new ArrayList<>();
+			List<Notification> nots = new ArrayList<>();
 			try {
 				JSONObject obj = new JSONObject(result);
 				if (obj.has("Android")) {
@@ -97,7 +98,7 @@ public class NotificationFragment extends Fragment {
 						n = new Notification(
 								Notification.inputDateFormat.parse(obj
 										.getString("msg_date")),
-								obj.getString("message"), obj.getInt("s_no"));
+								obj.getString("message"), obj.getLong("s_no"));
 						nots.add(n);
 						Log.d(TAG, n.toString());
 					}
@@ -107,6 +108,9 @@ public class NotificationFragment extends Fragment {
 			} finally {
 				Util.hideProgressDialog(getActivity());
 			}
+			DbHelper dbh = new DbHelper(getActivity());
+			dbh.addNotifications(nots);
+			nots = dbh.getNotifications();
 			notificationAdapter.setData(nots);
 		}
 	};
@@ -130,9 +134,7 @@ public class NotificationFragment extends Fragment {
 					requestErrorListner);
 			requestQueue.add(request);
 		} else {
-			Toast.makeText(getActivity(),
-					getString(R.string.toast_no_internet), Toast.LENGTH_SHORT)
-					.show();
+			Util.toast(getActivity(), getString(R.string.toast_no_internet));
 		}
 	}
 }

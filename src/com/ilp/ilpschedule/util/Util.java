@@ -14,14 +14,14 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.ilp.ilpschedule.BadgeFragment;
-import com.ilp.ilpschedule.ContactFragment;
-import com.ilp.ilpschedule.LocationFragment;
-import com.ilp.ilpschedule.NotificationFragment;
-import com.ilp.ilpschedule.ScheduleFragment;
 import com.ilp.ilpschedule.model.DrawerItem;
 import com.ilp.ilpschedule.model.Employee;
-import com.tcs.myilp.R;
+import com.ilp.ilpschedule.myilp.BadgeFragment;
+import com.ilp.ilpschedule.myilp.ContactFragment;
+import com.ilp.ilpschedule.myilp.LocationActivity;
+import com.ilp.ilpschedule.myilp.NotificationFragment;
+import com.ilp.ilpschedule.myilp.R;
+import com.ilp.ilpschedule.myilp.ScheduleFragment;
 
 public class Util {
 	private static final String TAG = "Util";
@@ -127,7 +127,7 @@ public class Util {
 				R.string.drawer_options_locations,
 				R.string.drawer_options_contacts };
 		String[] TAGS = { ScheduleFragment.TAG, NotificationFragment.TAG,
-				BadgeFragment.TAG,LocationFragment.TAG, ContactFragment.TAG };
+				BadgeFragment.TAG, LocationActivity.TAG, ContactFragment.TAG };
 		data.add(new DrawerItem(Constants.DRAWER_ITEM_TYPE.HEADER));
 		for (int i = 0; i < 5; i++) {
 			data.add(new DrawerItem(context.getString(OPTIONS[i]), ICONS[i],
@@ -223,5 +223,18 @@ public class Util {
 			strb.setLength(0);
 		}
 		return strb.toString();
+	}
+
+	public static int getBatchByPoints(int count) {
+		if (count >= 15 && count < 30)
+			return R.drawable.badge_karma_warrior;
+		else if (count >= 30 && count < 60)
+			return R.drawable.badge_karma_empower;
+		else if (count >= 60 && count < 100)
+			return R.drawable.badge_karma_leader;
+		else if (count >= 100)
+			return R.drawable.badge_karma_king;
+		else
+			return R.drawable.badge_nobadge;
 	}
 }

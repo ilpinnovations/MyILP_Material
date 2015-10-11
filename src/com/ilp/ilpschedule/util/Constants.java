@@ -6,15 +6,18 @@ import java.util.Locale;
 public interface Constants {
 	String PREF_FILE_NAME = "com.tcs.preffile";
 	String URL_BASE = "http://theinspirer.in/ilpscheduleapp/";
-	String URL_BADGES = URL_BASE + "points_json.php";
+	String URL_BADGES = URL_BASE + "points_json.php?";
 	String URL_NOTIFICATION = URL_BASE + "notify_json.php";
 	String URL_SCHEDULE = URL_BASE + "schedulelist_json.php";
-	String URL_CONTACTS = URL_BASE + "getEmergencyContacts.php";
+	String URL_CONTACTS = URL_BASE + "getEmergencyContacts.php?";
 	String URL_FEEDBACK = URL_BASE + "feedback_json.php";
 	String QUESTIONMARK = "?";
 	String AND = "&";
+	String SPACE = " ";
 	String EQUALS = "=";
 	String CHARSET = "UTF-8";
+	String GOOGLE_SENDER_ID = "397303718501";
+	
 	SimpleDateFormat paramsDateFormat = new SimpleDateFormat("yyyy-MM-dd",
 			Locale.US);
 
@@ -105,5 +108,9 @@ public interface Constants {
 			String COURSE = "course";
 			String SLOT_ID = "slot_id";
 		}
+	}
+
+	public interface JSON_KEYS {
+
 	}
 }

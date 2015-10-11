@@ -1,6 +1,7 @@
 package com.ilp.ilpschedule.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.ilp.ilpschedule.model.Notification;
 import com.ilp.ilpschedule.model.NotificationViewHolder;
-import com.tcs.myilp.R;
+import com.ilp.ilpschedule.myilp.R;
 
 public class NotificationAdapter extends ArrayAdapter<Notification> {
 	private Context context;
@@ -30,6 +31,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 		if (data != null && data.size() > 0) {
 			notifications.clear();
 			notifications.addAll(data);
+			Collections.sort(notifications);
 			notifyDataSetChanged();
 			notifyDataSetInvalidated();
 		}
@@ -41,7 +43,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 		if (convertView == null) {
 			convertView = ((LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.notification_item, null);
+					.inflate(R.layout.notification_item, parent, false);
 			nvh = new NotificationViewHolder();
 			nvh.setMsg((TextView) convertView
 					.findViewById(R.id.textViewNotificationContent));
@@ -56,5 +58,15 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 				Notification.outputDateFormat.format(getItem(position)
 						.getDate()));
 		return convertView;
+	}
+
+	public void addData(List<Notification> notifications) {
+		if (this.notifications == null)
+			this.notifications = new ArrayList<>();
+		this.notifications.clear();
+		this.notifications.addAll(notifications);
+		Collections.sort(this.notifications);
+		notifyDataSetInvalidated();
+		notifyDataSetChanged();
 	}
 }

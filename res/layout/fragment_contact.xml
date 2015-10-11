@@ -3,19 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.ilp.ilpschedule.MainActivity$PlaceholderFragment" >
+    tools:context="com.ilp.ilpschedule.myilp.MainActivity$PlaceholderFragment" >
 
     <ListView
         android:id="@+id/listViewContacts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:dividerHeight="@dimen/list_divider_height"
+        android:padding="@dimen/padding_low" >
     </ListView>
 
     <TextView
         android:id="@+id/textViewContactsEmptyView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:padding="@dimen/padding_high"
-        android:text="@string/list_empty_contacts" />
+        android:text="@string/list_empty_contacts"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

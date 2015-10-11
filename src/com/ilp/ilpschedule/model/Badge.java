@@ -1,6 +1,6 @@
 package com.ilp.ilpschedule.model;
 
-public class Badge {
+public class Badge implements Comparable<Badge> {
 	private String name;
 	private int points;
 
@@ -23,5 +23,10 @@ public class Badge {
 
 	public void setPoints(int points) {
 		this.points = points;
+	}
+
+	@Override
+	public int compareTo(Badge another) {
+		return another.getPoints() - points;
 	}
 }

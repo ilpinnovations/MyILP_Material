@@ -1,7 +1,9 @@
-package com.ilp.ilpschedule;
+package com.ilp.ilpschedule.myilp;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +20,6 @@ import com.ilp.ilpschedule.model.DrawerItemViewHolder;
 import com.ilp.ilpschedule.model.SlotViewHolder;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
-import com.tcs.myilp.R;
 
 public class MainActivity extends ActionBarActivity {
 	public static final String TAG = "MainActivity";
@@ -89,6 +90,11 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_logout) {
+			logout();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -101,6 +107,7 @@ public class MainActivity extends ActionBarActivity {
 	private void changeFragment(String tag, Bundle bundle) {
 		Fragment fragment;
 		fragment = getFragmentManager().findFragmentByTag(tag);
+
 		if (fragment == null) {
 			switch (tag) {
 			case ScheduleFragment.TAG:
@@ -123,18 +130,22 @@ public class MainActivity extends ActionBarActivity {
 				fragment = new FeedbackFragment();
 				currentTitle = getString(R.string.title_feedback);
 				break;
-			case LocationFragment.TAG:
-				fragment = new LocationFragment();
+			case LocationActivity.TAG:
+				fragment = null;
 				currentTitle = getString(R.string.title_location);
 				break;
 			}
-			if (bundle != null)
+			if (fragment != null && bundle != null)
 				fragment.setArguments(bundle);
 		}
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction().replace(R.id.container, fragment, tag);
-		fragmentTransaction.addToBackStack(tag);
-		fragmentTransaction.commit();
+		if (fragment != null) {
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction().replace(R.id.container, fragment, tag);
+			fragmentTransaction.addToBackStack(tag);
+			fragmentTransaction.commit();
+		} else
+			startActivity(new Intent(getApplicationContext(),
+					LocationActivity.class));
 	}
 
 	@Override
@@ -179,5 +190,12 @@ public class MainActivity extends ActionBarActivity {
 			};
 		}
 		return drawerItemClickListner;
+	}
+
+	private void logout() {
+		getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE)
+				.edit().clear().commit();
+		startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+		finish();
 	}
 }

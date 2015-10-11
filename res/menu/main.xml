@@ -2,4 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.tcs.myilp.MainActivity" >
 
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout">
+    </item>
+
 </menu>

@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule;
+package com.ilp.ilpschedule.myilp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,6 @@ import com.ilp.ilpschedule.model.Feedback;
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
-import com.tcs.myilp.R;
 
 public class FeedbackFragment extends Fragment {
 	public static final String TAG = "com.tcs.myilp.FeedbackFragment";

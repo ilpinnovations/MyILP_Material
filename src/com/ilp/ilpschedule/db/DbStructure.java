@@ -37,9 +37,10 @@ public class DbStructure {
 				.append(DbConstants.TYPE_INT)
 				.append(DbConstants.CONSTRAIN_PRIMARY_KEY)
 				.append(DbConstants.COMMA).append(COLUMN_TITLE)
-				.append(DbConstants.TYPE_TEXT).append(DbConstants.COMMA)
-				.append(COLUMN_NUMBER).append(DbConstants.TYPE_TEXT)
-				.append(DbConstants.BRACES_CLOSE).toString();
+				.append(DbConstants.TYPE_TEXT).append(DbConstants.UNIQUE)
+				.append(DbConstants.COMMA).append(COLUMN_NUMBER)
+				.append(DbConstants.TYPE_TEXT).append(DbConstants.BRACES_CLOSE)
+				.toString();
 		public static final String COMMAND_DROP = new StringBuilder(
 				DbConstants.DROP_TABLE).append(TABLE_NAME).toString();
 	}

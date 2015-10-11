@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.model.SlotViewHolder;
-import com.tcs.myilp.R;
+import com.ilp.ilpschedule.myilp.R;
 
 public class ScheduleAdapter extends ArrayAdapter<Slot> {
 	private Context context;
@@ -50,7 +50,7 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 		if (convertView == null) {
 			convertView = ((LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.schedule_list_item, null);
+					.inflate(R.layout.schedule_list_item, parent, false);
 			svh = new SlotViewHolder();
 
 			svh.setSlotContent((TextView) convertView

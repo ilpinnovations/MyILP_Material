@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.ilp.ilpschedule.model.DrawerItem;
 import com.ilp.ilpschedule.model.DrawerItemViewHolder;
 import com.ilp.ilpschedule.model.Employee;
+import com.ilp.ilpschedule.myilp.R;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
-import com.tcs.myilp.R;
 
 public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 	private Context context;
@@ -49,11 +49,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 			if (position == 0) {
 				// header
 				convertView = layoutInflater.inflate(R.layout.drawer_header,
-						null);
+						parent, false);
 				dvh.setType(Constants.DRAWER_ITEM_TYPE.HEADER);
 			} else {
-				convertView = layoutInflater
-						.inflate(R.layout.drawer_item, null);
+				convertView = layoutInflater.inflate(R.layout.drawer_item,
+						parent, false);
 				dvh.setIcon((ImageView) convertView
 						.findViewById(R.id.imageViewDrawer));
 				dvh.setOption((TextView) convertView

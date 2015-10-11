@@ -13,11 +13,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.ilp.ilpschedule.model.Contact;
 import com.ilp.ilpschedule.model.Feedback;
 import com.ilp.ilpschedule.model.Location;
+import com.ilp.ilpschedule.model.Notification;
 import com.ilp.ilpschedule.model.Slot;
 
 public class DbHelper extends SQLiteOpenHelper {
 	public static final String TAG = "DbHelper";
-	private static int DB_VERSION = 2;
+	private static int DB_VERSION = 3;
 	private static String DB_NAME = "myilpschedule.db";
 
 	public DbHelper(Context context) {
@@ -45,15 +46,78 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	public long addNotification(Notification notification) {
+		long id = -1;
+		ContentValues values = new ContentValues();
+		values.put(DbStructure.NotificationTable.COLUMN_MSG,
+				notification.getMsg());
+		values.put(DbStructure.NotificationTable._ID, notification.getId());
+		values.put(DbStructure.NotificationTable.COLUMN_TIME, notification
+				.getDate().getTime());
+		SQLiteDatabase db = getWritableDatabase();
+		id = db.insertWithOnConflict(DbStructure.NotificationTable.TABLE_NAME,
+				null, values, SQLiteDatabase.CONFLICT_REPLACE);
+		db.close();
+		return id;
+	}
+
+	public int addNotifications(List<Notification> notifications) {
+		int added = 0;
+		for (Notification notification : notifications) {
+			if (notification != null && notification.isValid()
+					&& addNotification(notification) != -1)
+				added++;
+		}
+		return added;
+	}
+
+	public List<Notification> getNotifications() {
+		List<Notification> notifications = new ArrayList<>();
+		Notification notification;
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(DbStructure.NotificationTable.TABLE_NAME,
+				null, null, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			do {
+				notification = new Notification();
+				notification
+						.setMsg(cursor.getString(cursor
+								.getColumnIndexOrThrow(DbStructure.NotificationTable.COLUMN_MSG)));
+				notification
+						.setId(cursor.getLong(cursor
+								.getColumnIndexOrThrow(DbStructure.NotificationTable._ID)));
+				notification
+						.setDate(new Date(
+								cursor.getLong(cursor
+										.getColumnIndexOrThrow(DbStructure.NotificationTable.COLUMN_MSG))));
+				notifications.add(notification);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return notifications;
+	}
+
 	public long addContact(Contact contact) {
 		long id;
 		ContentValues values = new ContentValues();
 		values.put(DbStructure.ContactTable.COLUMN_TITLE, contact.getTitle());
 		values.put(DbStructure.ContactTable.COLUMN_NUMBER, contact.getNumber());
 		SQLiteDatabase db = getWritableDatabase();
-		id = db.insert(DbStructure.ContactTable.TABLE_NAME, null, values);
+		id = db.insertWithOnConflict(DbStructure.ContactTable.TABLE_NAME, null,
+				values, SQLiteDatabase.CONFLICT_REPLACE);
 		db.close();
 		return id;
+	}
+
+	public int addContacts(List<Contact> contacts) {
+		int added = 0;
+		for (Contact contact : contacts) {
+			if (contact != null && contact.isValid()
+					&& addContact(contact) != -1)
+				added++;
+		}
+		return added;
 	}
 
 	public List<Contact> getContacts() {
@@ -70,7 +134,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				contact.setNumber(cursor.getString(cursor
 						.getColumnIndexOrThrow(DbStructure.ContactTable.COLUMN_NUMBER)));
 				contact.setTitle(cursor.getString(cursor
-						.getColumnIndexOrThrow(DbStructure.ContactTable.COLUMN_NUMBER)));
+						.getColumnIndexOrThrow(DbStructure.ContactTable.COLUMN_TITLE)));
 				contacts.add(contact);
 			} while (cursor.moveToNext());
 		}
@@ -96,16 +160,17 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(DbStructure.LocationTable.COLUMN_LOCATION,
 				location.getLocation());
 		values.put(DbStructure.LocationTable.COLUMN_NAME, location.getName());
-		id = this.getWritableDatabase().insert(
-				DbStructure.LocationTable.TABLE_NAME, null, values);
+		SQLiteDatabase db = this.getWritableDatabase();
+		id = db.insert(DbStructure.LocationTable.TABLE_NAME, null, values);
+		db.close();
 		return id;
 	}
 
 	public List<Location> getLocations() {
 		ArrayList<Location> locations = new ArrayList<>();
-		Cursor cursor = this.getReadableDatabase().query(
-				DbStructure.LocationTable.TABLE_NAME, null, null, null, null,
-				null, null);
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(DbStructure.LocationTable.TABLE_NAME, null,
+				null, null, null, null, null);
 		Location location;
 		if (cursor.moveToFirst()) {
 			do {
@@ -121,6 +186,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				locations.add(location);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
+		db.close();
 		return locations;
 	}
 
@@ -143,9 +210,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(DbStructure.ScheduleTable.COLUMN_COURSE, slot.getCourse());
 		values.put(DbStructure.ScheduleTable.COLUMN_FACULTY, slot.getFaculty());
 		values.put(DbStructure.ScheduleTable.COLUMN_ROOM, slot.getRoom());
-
-		id = this.getWritableDatabase().insert(
-				DbStructure.ScheduleTable.TABLE_NAME, null, values);
+		SQLiteDatabase db = getWritableDatabase();
+		id = db.insert(DbStructure.ScheduleTable.TABLE_NAME, null, values);
+		db.close();
 		return id;
 	}
 
@@ -184,10 +251,10 @@ public class DbHelper extends SQLiteOpenHelper {
 				.append(DbStructure.ScheduleTable.COLUMN_BATCH)
 				.append(DbConstants.EQUALS).append(DbConstants.QUESTION_MARK)
 				.toString();
-		Cursor cursor = this.getReadableDatabase().query(
-				DbStructure.ScheduleTable.TABLE_NAME, null, where,
-				new String[] { String.valueOf(date.getTime()), batch }, null,
-				null, DbStructure.ScheduleTable.COLUMN_SLOT);
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor = db.query(DbStructure.ScheduleTable.TABLE_NAME, null,
+				where, new String[] { String.valueOf(date.getTime()), batch },
+				null, null, DbStructure.ScheduleTable.COLUMN_SLOT);
 
 		Slot slot;
 		if (cursor.moveToFirst()) {
@@ -211,6 +278,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				slots.add(slot);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
+		db.close();
 		return slots;
 	}
 

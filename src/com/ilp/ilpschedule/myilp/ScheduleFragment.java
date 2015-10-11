@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule;
+package com.ilp.ilpschedule.myilp;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,7 +37,6 @@ import com.ilp.ilpschedule.db.DbHelper;
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
-import com.tcs.myilp.R;
 
 public class ScheduleFragment extends Fragment {
 	private TextView textViewdate;
@@ -275,12 +273,4 @@ public class ScheduleFragment extends Fragment {
 		outState.putString("lgName", lgName);
 		outState.putLong("date", date.getTime());
 	}
-
-	@Override
-	public void onDestroy() {
-		Toast.makeText(getActivity(), "schedule fragment destroyed",
-				Toast.LENGTH_SHORT).show();
-		super.onDestroy();
-	}
-
 }
