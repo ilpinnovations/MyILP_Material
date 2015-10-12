@@ -12,9 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.Badge;
 import com.ilp.ilpschedule.model.BadgeViewHolder;
-import com.ilp.ilpschedule.myilp.R;
 import com.ilp.ilpschedule.util.Util;
 
 public class BadgeAdapter extends ArrayAdapter<Badge> {

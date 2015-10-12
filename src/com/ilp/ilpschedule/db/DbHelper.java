@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.ilp.ilpschedule.model.Contact;
 import com.ilp.ilpschedule.model.Feedback;
@@ -18,7 +19,7 @@ import com.ilp.ilpschedule.model.Slot;
 
 public class DbHelper extends SQLiteOpenHelper {
 	public static final String TAG = "DbHelper";
-	private static int DB_VERSION = 3;
+	private static int DB_VERSION = 5;
 	private static String DB_NAME = "myilpschedule.db";
 
 	public DbHelper(Context context) {
@@ -156,7 +157,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	public long addLocation(Location location) {
 		long id;
 		ContentValues values = new ContentValues();
-		values.put(DbStructure.LocationTable.COLUMN_BATCH, location.getBatch());
+		values.put(DbStructure.LocationTable.COLUMN_LAT, location.getLat());
+		values.put(DbStructure.LocationTable.COLUMN_LON, location.getLon());
 		values.put(DbStructure.LocationTable.COLUMN_LOCATION,
 				location.getLocation());
 		values.put(DbStructure.LocationTable.COLUMN_NAME, location.getName());
@@ -179,8 +181,10 @@ public class DbHelper extends SQLiteOpenHelper {
 						.getColumnIndexOrThrow(DbStructure.LocationTable._ID)));
 				location.setName(cursor.getString(cursor
 						.getColumnIndexOrThrow(DbStructure.LocationTable.COLUMN_NAME)));
-				location.setBatch(cursor.getString(cursor
-						.getColumnIndexOrThrow(DbStructure.LocationTable.COLUMN_BATCH)));
+				location.setLon(cursor.getDouble(cursor
+						.getColumnIndexOrThrow(DbStructure.LocationTable.COLUMN_LON)));
+				location.setLat(cursor.getDouble(cursor
+						.getColumnIndexOrThrow(DbStructure.LocationTable.COLUMN_LAT)));
 				location.setLocation(cursor.getString(cursor
 						.getColumnIndexOrThrow(DbStructure.LocationTable.COLUMN_LOCATION)));
 				locations.add(location);
@@ -211,7 +215,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(DbStructure.ScheduleTable.COLUMN_FACULTY, slot.getFaculty());
 		values.put(DbStructure.ScheduleTable.COLUMN_ROOM, slot.getRoom());
 		SQLiteDatabase db = getWritableDatabase();
-		id = db.insert(DbStructure.ScheduleTable.TABLE_NAME, null, values);
+		id = db.insertWithOnConflict(DbStructure.ScheduleTable.TABLE_NAME,
+				null, values, SQLiteDatabase.CONFLICT_REPLACE);
 		db.close();
 		return id;
 	}
@@ -280,6 +285,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		db.close();
+		Log.d(TAG, "date=" + date.getTime() + "batch=" + batch + "\n" + slots);
 		return slots;
 	}
 
@@ -388,4 +394,5 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.close();
 		return result;
 	}
+
 }

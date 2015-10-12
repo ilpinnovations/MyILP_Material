@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.Notification;
 import com.ilp.ilpschedule.model.NotificationViewHolder;
-import com.ilp.ilpschedule.myilp.R;
 
 public class NotificationAdapter extends ArrayAdapter<Notification> {
 	private Context context;

@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule.myilp;
+package com.ilp.ilpschedule;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -196,8 +196,17 @@ public class ScheduleFragment extends Fragment {
 	};
 
 	public ScheduleFragment() {
-		date = new Date(Calendar.getInstance().getTimeInMillis());
-
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH)+1;
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		String dateStr = String.valueOf(year)
+				+ "-"
+				+ (month < 10 ? "0" + String.valueOf(month) : String
+						.valueOf(month)) + "-"
+				+ (day < 10 ? "0" + String.valueOf(day) : String.valueOf(day));
+		Log.d(TAG, "dateStr" + dateStr);
+		date = Date.valueOf(dateStr);
 	}
 
 	@Override

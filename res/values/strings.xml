@@ -22,10 +22,11 @@
     <string name="badge_more_for_empower"> points more to win the Feedback Karma Empower badge.</string>
     <string name="badge_more_for_leader"> points more to win the Feedback Karma Leader badge.</string>
     <string name="badge_more_for_king"> points more to win the Feedback Karma King badge.</string>
-    
+
     <!-- Menu -->
     <string name="action_refresh">Refresh</string>
     <string name="action_logout">Logout</string>
+    <string name="action_search">Search</string>
 
     <!-- Login Activity -->
     <string name="location">Location</string>
@@ -40,6 +41,7 @@
     <string name="hint_batch">Batch</string>
     <string name="hint_faculty">Faculty</string>
     <string name="hint_course">Course</string>
+    <string name="hint_search">Search</string>
     <string name="hint_comment">Comment</string>
     <string name="hint_lg">Learning Group (LG)</string>
 
@@ -65,8 +67,11 @@
     <string name="toast_no_internet">No Internet connection</string>
     <string name="toast_no_schedule">No schedule available</string>
     <string name="toast_blank_lg">LG name cannot be empty</string>
+    <string name="toast_error_connecting">Error connecting to server. Try again!</string>
+    <string name="toast_reg_error">Fail to register. Try again!</string>
     <string name="toast_feedback_success">Feedback submitted successfully, Thank you</string>
     <string name="toast_feedback_fail">Feedback cannot be submitted, Try again!</string>
+    <string name="toast_feedback_already">You already submitted feedback  got this session.</string>
 
     <string-array name="locations">
         <item name="trivandrum">Trivandrum</item>

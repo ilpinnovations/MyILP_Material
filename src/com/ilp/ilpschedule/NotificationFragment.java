@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule.myilp;
+package com.ilp.ilpschedule;
 
 import java.util.ArrayList;
 import java.util.List;

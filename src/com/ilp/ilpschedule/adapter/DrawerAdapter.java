@@ -11,10 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.DrawerItem;
 import com.ilp.ilpschedule.model.DrawerItemViewHolder;
 import com.ilp.ilpschedule.model.Employee;
-import com.ilp.ilpschedule.myilp.R;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
 

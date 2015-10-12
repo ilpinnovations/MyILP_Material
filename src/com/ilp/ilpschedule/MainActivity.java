@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule.myilp;
+package com.ilp.ilpschedule;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -135,9 +135,9 @@ public class MainActivity extends ActionBarActivity {
 				currentTitle = getString(R.string.title_location);
 				break;
 			}
-			if (fragment != null && bundle != null)
-				fragment.setArguments(bundle);
 		}
+		if (tag.equalsIgnoreCase(FeedbackFragment.TAG))
+			((FeedbackFragment) fragment).setData(bundle);
 		if (fragment != null) {
 			FragmentTransaction fragmentTransaction = getFragmentManager()
 					.beginTransaction().replace(R.id.container, fragment, tag);

@@ -8,8 +8,8 @@ public class DbStructure {
 
 		public static final String COLUMN_NAME = "name";
 		public static final String COLUMN_LOCATION = "loc";
-		public static final String COLUMN_BATCH = "batch";
-
+		public static final String COLUMN_LAT = "lat";
+		public static final String COLUMN_LON = "lon";
 		public static final String COMMAND_CREATE = new StringBuilder(
 				DbConstants.CREATE_TABLE).append(TABLE_NAME)
 				.append(DbConstants.BRACES_OPEN).append(_ID)
@@ -18,9 +18,10 @@ public class DbStructure {
 				.append(DbConstants.COMMA).append(COLUMN_NAME)
 				.append(DbConstants.TYPE_TEXT).append(DbConstants.COMMA)
 				.append(COLUMN_LOCATION).append(DbConstants.TYPE_TEXT)
-				.append(DbConstants.COMMA).append(COLUMN_BATCH)
-				.append(DbConstants.TYPE_TEXT).append(DbConstants.BRACES_CLOSE)
-				.toString();
+				.append(DbConstants.COMMA).append(COLUMN_LAT)
+				.append(DbConstants.TYPE_REAL).append(DbConstants.COMMA)
+				.append(COLUMN_LON).append(DbConstants.TYPE_REAL)
+				.append(DbConstants.BRACES_CLOSE).toString();
 		public static final String COMMAND_DROP = new StringBuilder(
 				DbConstants.DROP_TABLE).append(TABLE_NAME).toString();
 	}
@@ -69,6 +70,10 @@ public class DbStructure {
 				.append(DbConstants.COMMA).append(COLUMN_FACULTY)
 				.append(DbConstants.TYPE_TEXT).append(DbConstants.COMMA)
 				.append(COLUMN_ROOM).append(DbConstants.TYPE_TEXT)
+				.append(DbConstants.COMMA).append(DbConstants.UNIQUE)
+				.append(DbConstants.BRACES_OPEN).append(COLUMN_DATE)
+				.append(DbConstants.COMMA).append(COLUMN_SLOT)
+				.append(DbConstants.BRACES_CLOSE)
 				.append(DbConstants.BRACES_CLOSE).toString();
 		public static final String COMMAND_DROP = new StringBuilder(
 				DbConstants.DROP_TABLE).append(TABLE_NAME).toString();

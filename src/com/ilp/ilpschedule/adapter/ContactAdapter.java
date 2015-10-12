@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.Contact;
 import com.ilp.ilpschedule.model.ContactViewHolder;
-import com.ilp.ilpschedule.myilp.R;
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
 

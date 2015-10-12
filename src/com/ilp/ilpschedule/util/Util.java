@@ -2,6 +2,7 @@ package com.ilp.ilpschedule.util;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -14,17 +15,21 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.ilp.ilpschedule.BadgeFragment;
+import com.ilp.ilpschedule.ContactFragment;
+import com.ilp.ilpschedule.LocationActivity;
+import com.ilp.ilpschedule.NotificationFragment;
+import com.ilp.ilpschedule.R;
+import com.ilp.ilpschedule.ScheduleFragment;
 import com.ilp.ilpschedule.model.DrawerItem;
 import com.ilp.ilpschedule.model.Employee;
-import com.ilp.ilpschedule.myilp.BadgeFragment;
-import com.ilp.ilpschedule.myilp.ContactFragment;
-import com.ilp.ilpschedule.myilp.LocationActivity;
-import com.ilp.ilpschedule.myilp.NotificationFragment;
-import com.ilp.ilpschedule.myilp.R;
-import com.ilp.ilpschedule.myilp.ScheduleFragment;
+import com.ilp.ilpschedule.model.Location;
 
 public class Util {
 	private static final String TAG = "Util";
+	private static List<Location> locations;
 
 	public static int saveEmployee(Context context, Employee emp) {
 		int empError = emp.isValid();
@@ -38,8 +43,7 @@ public class Util {
 					.putString(Constants.PREF_KEYS.EMP_BATCH, emp.getBatch())
 					.putString(Constants.PREF_KEYS.EMP_LG, emp.getLg())
 					.putString(Constants.PREF_KEYS.EMP_LOCATION,
-							emp.getLocation())
-					.putBoolean(Constants.PREF_KEYS.IS_LOGIN, true).commit();
+							emp.getLocation()).commit();
 
 		}
 		return empError;
@@ -110,6 +114,12 @@ public class Util {
 		SharedPreferences spf = context.getSharedPreferences(
 				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
 		return spf.getBoolean(Constants.PREF_KEYS.IS_LOGIN, false);
+	}
+
+	public static void doLogin(Context context) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		spf.edit().putBoolean(Constants.PREF_KEYS.IS_LOGIN, true).commit();
 	}
 
 	public static ArrayList<DrawerItem> getDrawerItemList(Context context) {
@@ -236,5 +246,79 @@ public class Util {
 			return R.drawable.badge_karma_king;
 		else
 			return R.drawable.badge_nobadge;
+	}
+
+	public static Location getLocation(String location, String name) {
+		for (Location loc : getLocations()) {
+			if (loc.getLocation().equalsIgnoreCase(location)
+					&& loc.getName().equalsIgnoreCase(name))
+				return loc;
+		}
+		return null;
+	}
+
+	public static List<Location> getLocations() {
+		if (locations == null) {
+			locations = new ArrayList<>();
+			Location location;
+			location = new Location();
+			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
+			location.setLat(8.5525038);
+			location.setLon(76.8800041);
+			location.setName(Constants.LOCATIONS.TRIVANDRUM.ILP_PEEPAL_PARK);
+			locations.add(location);
+
+			location = new Location();
+			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
+			location.setLat(8.555145);
+			location.setLon(76.880294);
+			location.setName(Constants.LOCATIONS.TRIVANDRUM.ILP_CLC_BUILDING);
+			locations.add(location);
+
+			location = new Location();
+			location.setLocation(Constants.LOCATIONS.GUWAHATI.LOC_NAME);
+			location.setLat(26.150799);
+			location.setLon(91.790978);
+			location.setName(Constants.LOCATIONS.GUWAHATI.ILP_LOC);
+			locations.add(location);
+
+			location = new Location();
+			location.setLocation(Constants.LOCATIONS.CHENNAI.LOC_NAME);
+			location.setLat(13.096596);
+			location.setLon(80.165716);
+			location.setName(Constants.LOCATIONS.CHENNAI.ILP_LOC);
+			locations.add(location);
+
+			location = new Location();
+			location.setLocation(Constants.LOCATIONS.HYDERABAD.LOC_NAME);
+			location.setLat(17.427160);
+			location.setLon(78.331661);
+			location.setName(Constants.LOCATIONS.HYDERABAD.ILP_LOC);
+			locations.add(location);
+		}
+		return locations;
+	}
+
+	public static String getGcmRegistrationId(Context context) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		return spf.getString(Constants.PREF_KEYS.GCM_REG_ID, null);
+	}
+
+	public static void saveGcmRegistrationId(Context context, String regId) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		spf.edit().putString(Constants.PREF_KEYS.GCM_REG_ID, regId).commit();
+	}
+
+	public static boolean isGooglePlayServicesAvailable(Activity activity) {
+		int status = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(activity.getApplicationContext());
+		if (ConnectionResult.SUCCESS == status) {
+			return true;
+		} else {
+			GooglePlayServicesUtil.getErrorDialog(status, activity, 0).show();
+			return false;
+		}
 	}
 }

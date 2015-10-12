@@ -5,8 +5,8 @@ import com.ilp.ilpschedule.util.Util;
 public class Location {
 	private long id;
 	private String name;
+	private double lat, lon;
 	private String location;
-	private String batch;
 
 	public long getId() {
 		return id;
@@ -24,14 +24,6 @@ public class Location {
 		this.name = name;
 	}
 
-	public String getBatch() {
-		return batch;
-	}
-
-	public void setBatch(String batch) {
-		this.batch = batch;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -46,8 +38,24 @@ public class Location {
 	 * @return
 	 */
 	public boolean isValid() {
-		return Util.checkString(name) && Util.checkString(batch)
+		return Util.checkString(name) && lat > 0.0 && lon > 0.0
 				&& Util.checkString(location);
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
 	}
 
 }

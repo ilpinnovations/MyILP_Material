@@ -11,13 +11,17 @@ public interface Constants {
 	String URL_SCHEDULE = URL_BASE + "schedulelist_json.php";
 	String URL_CONTACTS = URL_BASE + "getEmergencyContacts.php?";
 	String URL_FEEDBACK = URL_BASE + "feedback_json.php";
+	String URL_REGISTER = URL_BASE + "register.php";
+	String URL_GOOGLE_MAP_SEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+
 	String QUESTIONMARK = "?";
 	String AND = "&";
 	String SPACE = " ";
 	String EQUALS = "=";
 	String CHARSET = "UTF-8";
 	String GOOGLE_SENDER_ID = "397303718501";
-	
+	String GOOGLE_MAP_API_KEY = "AIzaSyBianbp_fsoHniTb_56PHcHTzoDs6dvQkc";
+
 	SimpleDateFormat paramsDateFormat = new SimpleDateFormat("yyyy-MM-dd",
 			Locale.US);
 
@@ -29,6 +33,7 @@ public interface Constants {
 		String EMP_EMAIL = "key_email";
 		String EMP_LG = "key_lg";
 		String IS_LOGIN = "is_login";
+		String GCM_REG_ID = "gcm_reg_id";
 	}
 
 	public interface EMP_ERRORS {
@@ -100,6 +105,14 @@ public interface Constants {
 			String SLOT = "slot";
 			String DATE = "date";
 		}
+
+		public interface MAP {
+			String LOCATION = "location";
+			String KEY = "key";
+			String RADIUS = "radius";
+			String TYPES = "types";
+			String SENSOR = "sensor";
+		}
 	}
 
 	public interface BUNDLE_KEYS {
@@ -112,5 +125,28 @@ public interface Constants {
 
 	public interface JSON_KEYS {
 
+	}
+
+	public interface LOCATIONS {
+		public interface TRIVANDRUM {
+			String LOC_NAME = "Trivandrum";
+			String ILP_PEEPAL_PARK = "Peepul Park";
+			String ILP_CLC_BUILDING = "TCS CLC Building";
+		}
+
+		public interface CHENNAI {
+			String LOC_NAME = "Chennai";
+			String ILP_LOC = "Chennai ILP";
+		}
+
+		public interface GUWAHATI {
+			String LOC_NAME = "Guwahati";
+			String ILP_LOC = "Guwahati ILP";
+		}
+
+		public interface HYDERABAD {
+			String LOC_NAME = "Hyderabad";
+			String ILP_LOC = "Hyderabad ILP";
+		}
 	}
 }

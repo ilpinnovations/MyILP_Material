@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule.myilp;
+package com.ilp.ilpschedule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,6 +180,8 @@ public class BadgeFragment extends Fragment {
 		@Override
 		public void onErrorResponse(VolleyError error) {
 			Log.d(TAG, "error fetching badges->" + error.getLocalizedMessage());
+			Util.toast(getActivity(),
+					getString(R.string.toast_error_connecting));
 			Util.hideProgressDialog(getActivity());
 		}
 	};
@@ -240,7 +242,7 @@ public class BadgeFragment extends Fragment {
 			Employee emp = Util.getEmployee(getActivity());
 			params.put(Constants.NETWORK_PARAMS.BADGE.EMPID,
 					String.valueOf(emp.getEmpId()));
-			params.put(Constants.NETWORK_PARAMS.BADGE.BATCH, emp.getBatch());
+			params.put(Constants.NETWORK_PARAMS.BADGE.BATCH, emp.getLg());
 			StringRequest request = new StringRequest(Constants.URL_BADGES
 					+ Util.getUrlEncodedString(params),
 					fetchBadgesSuccessListner, fetchBadgesErrorListner);

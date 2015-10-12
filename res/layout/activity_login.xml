@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.ilp.ilpschedule.myilp.MainActivity"
+    tools:context="com.ilp.ilpschedule.MainActivity"
     tools:ignore="MergeRootFrame" >
 
     <android.support.v7.widget.Toolbar

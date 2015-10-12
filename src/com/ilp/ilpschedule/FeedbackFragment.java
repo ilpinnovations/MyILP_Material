@@ -1,4 +1,4 @@
-package com.ilp.ilpschedule.myilp;
+package com.ilp.ilpschedule;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +39,7 @@ public class FeedbackFragment extends Fragment {
 	private ImageButton imageButtonFeedbackSend;
 	private RatingBar ratingBarFeedback;
 	private long slot_id;
+	private Bundle bundle;
 	private RequestQueue reqQueue;
 	private OnClickListener feedbackSubmitClickListner = new OnClickListener() {
 		@Override
@@ -138,6 +139,8 @@ public class FeedbackFragment extends Fragment {
 							String res = jobj.getString("feed_result");
 							if (res.equalsIgnoreCase("success")) {
 								res = getString(R.string.toast_feedback_success);
+							} else if (res.equalsIgnoreCase("already")) {
+								res = getString(R.string.toast_feedback_already);
 							} else {
 								res = getString(R.string.toast_feedback_fail);
 							}
@@ -201,7 +204,6 @@ public class FeedbackFragment extends Fragment {
 
 	@Override
 	public void onStart() {
-		Bundle bundle = getArguments();
 		editTextFaculty.setText((String) bundle
 				.get(Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.FACULTY));
 		editTextCourse.setText((String) bundle
@@ -228,5 +230,9 @@ public class FeedbackFragment extends Fragment {
 
 	private boolean isDataValid() {
 		return Util.checkString(editTextComment.getText().toString());
+	}
+
+	public void setData(Bundle bundle) {
+		this.bundle = bundle;
 	}
 }

@@ -19,8 +19,14 @@
     <color name="color_set_b">#9C27B0</color>
     <color name="color_set_c">#FF5722</color>
     <color name="color_set_d">#2196F3</color>
-    
+
+    <!-- Loc button -->
+    <color name="color_loc_btn">#fdfdfd</color>
+    <color name="color_loc_btn_pressed">#fafafa</color>
+
     <!-- Badge header -->
     <color name="color_badge_header">#E91E63</color>
+    <!-- Map Toolbar color -->
+    <color name="color_map_toolbar">#fdfdfd</color>
 
 </resources>

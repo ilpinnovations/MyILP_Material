@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.model.SlotViewHolder;
-import com.ilp.ilpschedule.myilp.R;
 
 public class ScheduleAdapter extends ArrayAdapter<Slot> {
 	private Context context;
@@ -64,7 +64,6 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 
 			svh.setRoomContent((TextView) convertView
 					.findViewById(R.id.textViewRoomContent));
-			svh.setId(data.get(position).getId());
 			convertView.setTag(svh);
 		}
 		Slot s = data.get(position);
@@ -73,8 +72,9 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 		svh.getRoomContent().setText(s.getRoom());
 		svh.getCourseContent().setText(s.getCourse());
 		svh.getFacultyContent().setText(s.getFaculty());
-		svh.setId(data.get(position).getId());
+		svh.setId(s.getId());
 		convertView.setOnClickListener(callbackListner);
+		convertView.setTag(svh);
 		return convertView;
 	}
 }
