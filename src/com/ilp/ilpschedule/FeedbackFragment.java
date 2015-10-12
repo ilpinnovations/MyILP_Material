@@ -129,6 +129,7 @@ public class FeedbackFragment extends Fragment {
 	private Response.Listener<String> feedbackTaskSuccessListner = new Response.Listener<String>() {
 		@Override
 		public void onResponse(String response) {
+			boolean result = false;
 			try {
 				JSONObject jobj = new JSONObject(response);
 				if (jobj.has("Android")) {
@@ -139,8 +140,10 @@ public class FeedbackFragment extends Fragment {
 							String res = jobj.getString("feed_result");
 							if (res.equalsIgnoreCase("success")) {
 								res = getString(R.string.toast_feedback_success);
+								result = true;
 							} else if (res.equalsIgnoreCase("already")) {
 								res = getString(R.string.toast_feedback_already);
+								result = true;
 							} else {
 								res = getString(R.string.toast_feedback_fail);
 							}
@@ -155,6 +158,8 @@ public class FeedbackFragment extends Fragment {
 			} finally {
 				Util.hideProgressDialog(getActivity());
 			}
+			if (result)
+				getFragmentManager().popBackStack();
 			Log.d(TAG, response);
 		}
 	};
@@ -237,4 +242,5 @@ public class FeedbackFragment extends Fragment {
 	public void setData(Bundle bundle) {
 		this.bundle = bundle;
 	}
+	
 }

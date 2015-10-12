@@ -179,26 +179,31 @@ public class LocationActivity extends ActionBarActivity {
 
 		@Override
 		public void onClick(View v) {
-			showProgressLocationSearch();
-			String type = editTextSearch.getText().toString();
-			Map<String, String> params = new HashMap<>();
-			params.put(Constants.NETWORK_PARAMS.MAP.LOCATION, latitude + ","
-					+ longitude);
-			params.put(Constants.NETWORK_PARAMS.MAP.RADIUS,
-					String.valueOf(PROXIMITY_RADIUS));
-			params.put(Constants.NETWORK_PARAMS.MAP.TYPES, type);
-			params.put(Constants.NETWORK_PARAMS.MAP.SENSOR,
-					String.valueOf(true));
-			params.put(Constants.NETWORK_PARAMS.MAP.KEY,
-					Constants.GOOGLE_MAP_API_KEY);
-			StringBuilder googlePlacesUrl = new StringBuilder(
-					Constants.URL_GOOGLE_MAP_SEARCH).append(Util
-					.getUrlEncodedString(params));
-			Log.d(TAG, "ping at ->>" + googlePlacesUrl.toString());
-			StringRequest request = new StringRequest(
-					googlePlacesUrl.toString(), searchPlacesSuccessListner,
-					searchPlacesErrorListner);
-			getReqQueue().add(request);
+			if (Util.hasInternetAccess(getApplicationContext())) {
+				showProgressLocationSearch();
+				String type = editTextSearch.getText().toString();
+				Map<String, String> params = new HashMap<>();
+				params.put(Constants.NETWORK_PARAMS.MAP.LOCATION, latitude
+						+ "," + longitude);
+				params.put(Constants.NETWORK_PARAMS.MAP.RADIUS,
+						String.valueOf(PROXIMITY_RADIUS));
+				params.put(Constants.NETWORK_PARAMS.MAP.TYPES, type);
+				params.put(Constants.NETWORK_PARAMS.MAP.SENSOR,
+						String.valueOf(true));
+				params.put(Constants.NETWORK_PARAMS.MAP.KEY,
+						Constants.GOOGLE_MAP_API_KEY);
+				StringBuilder googlePlacesUrl = new StringBuilder(
+						Constants.URL_GOOGLE_MAP_SEARCH).append(Util
+						.getUrlEncodedString(params));
+				Log.d(TAG, "ping at ->>" + googlePlacesUrl.toString());
+				StringRequest request = new StringRequest(
+						googlePlacesUrl.toString(), searchPlacesSuccessListner,
+						searchPlacesErrorListner);
+				getReqQueue().add(request);
+			} else {
+				Util.toast(getApplicationContext(),
+						getString(R.string.toast_no_internet));
+			}
 		}
 	};
 

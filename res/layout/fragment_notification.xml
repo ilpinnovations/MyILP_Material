@@ -8,6 +8,9 @@
         android:id="@+id/listViewNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:divider="@null"
+        android:dividerHeight="@dimen/list_divider_height"
         tools:context="com.ilp.ilpschedule.MainActivity$PlaceholderFragment" >
     </ListView>
 
@@ -15,7 +18,9 @@
         android:id="@+id/textViewNotificationEmptyView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_high"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_high"
+        android:background="@drawable/map_search"
         android:gravity="center"
         android:padding="@dimen/padding_normal"
         android:text="@string/list_empty_notification"

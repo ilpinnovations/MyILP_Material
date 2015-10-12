@@ -66,6 +66,7 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 					.findViewById(R.id.textViewRoomContent));
 			convertView.setTag(svh);
 		}
+
 		Slot s = data.get(position);
 		svh = (SlotViewHolder) convertView.getTag();
 		svh.getSlotContent().setText("Slot " + s.getSlot());

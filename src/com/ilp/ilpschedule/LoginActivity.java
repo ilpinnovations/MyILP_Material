@@ -6,10 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import android.content.Context;
 import android.content.Intent;
@@ -55,10 +53,6 @@ public class LoginActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		if (savedInstanceState == null) {
-			// getFragmentManager().beginTransaction()
-			// .add(R.id.container, new MainFragment()).commit();
-		}
 		locationAdapter = new ArrayAdapter<String>(getApplicationContext(),
 				R.layout.location_item, getResources().getStringArray(
 						R.array.locations));

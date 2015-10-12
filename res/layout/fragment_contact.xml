@@ -9,14 +9,17 @@
         android:id="@+id/listViewContacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@null"
         android:dividerHeight="@dimen/list_divider_height"
-        android:padding="@dimen/padding_low" >
+        android:layout_margin="@dimen/margin_normal" >
     </ListView>
 
     <TextView
         android:id="@+id/textViewContactsEmptyView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:background="@drawable/map_search"
         android:gravity="center"
         android:padding="@dimen/padding_high"
         android:text="@string/list_empty_contacts"

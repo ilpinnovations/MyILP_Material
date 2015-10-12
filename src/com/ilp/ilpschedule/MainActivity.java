@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
 	private String currentTitle;
 	private OnClickListener drawerItemClickListner;
 	private OnClickListener scheduleItemClickListner;
+	private boolean navigateBackToFragment = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +130,7 @@ public class MainActivity extends ActionBarActivity {
 			case FeedbackFragment.TAG:
 				fragment = new FeedbackFragment();
 				currentTitle = getString(R.string.title_feedback);
+				navigateBackToFragment = true;
 				break;
 			case LocationActivity.TAG:
 				fragment = null;
@@ -197,5 +199,14 @@ public class MainActivity extends ActionBarActivity {
 				.edit().clear().commit();
 		startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 		finish();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (navigateBackToFragment) {
+			getFragmentManager().popBackStack();
+			navigateBackToFragment = false;
+		} else
+			super.onBackPressed();
 	}
 }

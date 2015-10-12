@@ -302,6 +302,22 @@ public class Util {
 			location.setName("Hyderabad ILP center");
 			locations.add(location);
 
+			location = new ILPLocation();
+			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
+			location.setLat(8.553064);
+			location.setLon(76.877913);
+			location.setType(Constants.LOCATIONS.TYPE.HOSTEL);
+			location.setName("Executive Hostel TCS");
+			locations.add(location);
+
+			location = new ILPLocation();
+			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
+			location.setLat(8.551389);
+			location.setLon(76.879763);
+			location.setType(Constants.LOCATIONS.TYPE.HOSTEL);
+			location.setName("Peepul Park Hostel TCS");
+			locations.add(location);
+
 		}
 		return locations;
 	}

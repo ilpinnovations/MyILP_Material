@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_normal"
+    android:layout_margin="@dimen/margin_low"
     android:background="@drawable/map_search"
     android:orientation="vertical"
     android:padding="@dimen/padding_low" >
@@ -12,20 +12,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewSlotTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_slot" />
+            android:text="@string/slot_item_slot"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewSlotContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:text="A"
+            android:text="Slot A"
             android:textColor="@color/colorText" />
     </LinearLayout>
 
@@ -34,19 +34,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewCourseTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_course" />
+            android:text="@string/slot_item_course"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewCourseContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
             android:text="Javascript n all"
             android:textColor="@color/colorText" />
     </LinearLayout>
@@ -56,19 +56,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewFacultyTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_faculty" />
+            android:text="@string/slot_item_faculty"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewFacultyContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
             android:text="Sridevi D V"
             android:textColor="@color/colorText" />
     </LinearLayout>
@@ -78,19 +78,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewRoomTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/slot_item_room" />
+            android:text="@string/slot_item_room"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewRoomContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
             android:text="CR5"
             android:textColor="@color/colorText" />
     </LinearLayout>

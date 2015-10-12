@@ -70,6 +70,7 @@
         android:id="@+id/textViewScheduleEmptyView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/map_search"
         android:gravity="center"
         android:padding="@dimen/padding_high"
         android:text="@string/list_empty_schedule"

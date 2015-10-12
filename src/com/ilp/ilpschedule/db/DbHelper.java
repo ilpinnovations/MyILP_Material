@@ -90,7 +90,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				notification
 						.setDate(new Date(
 								cursor.getLong(cursor
-										.getColumnIndexOrThrow(DbStructure.NotificationTable.COLUMN_MSG))));
+										.getColumnIndexOrThrow(DbStructure.NotificationTable.COLUMN_TIME))));
 				notifications.add(notification);
 			} while (cursor.moveToNext());
 		}
