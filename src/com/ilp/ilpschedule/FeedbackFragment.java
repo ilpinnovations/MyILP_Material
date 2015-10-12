@@ -212,6 +212,8 @@ public class FeedbackFragment extends Fragment {
 				.get(Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.SLOT_ID);
 		DbHelper dbh = new DbHelper(getActivity());
 		Feedback feedback = dbh.getFeedbackBySlotId(slot_id);
+		editTextComment.setText("");
+		ratingBarFeedback.setRating(1.0f);
 		if (feedback != null) {
 			if (feedback.getComment() != null)
 				editTextComment.setText(feedback.getComment());

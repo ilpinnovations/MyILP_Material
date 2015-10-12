@@ -1,6 +1,7 @@
 package com.ilp.ilpschedule;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.AlertDialog;
@@ -13,7 +14,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -32,7 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ilp.ilpschedule.model.Employee;
-import com.ilp.ilpschedule.model.Location;
+import com.ilp.ilpschedule.model.ILPLocation;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
 
@@ -42,8 +42,8 @@ public class LocationActivity extends ActionBarActivity {
 
 	private GoogleMap map;
 	private LocationManager locationManager;
-	private ImageButton imageButtonClc, imageButtonPp, imageButtonHostel,
-			imageButtonSearch;
+	private ImageButton imageButtonIlp, imageButtonMyLocation,
+			imageButtonHostel, imageButtonSearch;
 	private ProgressBar progressBarSearchLocation;
 	private EditText editTextSearch;
 	private double latitude = 0;
@@ -71,20 +71,67 @@ public class LocationActivity extends ActionBarActivity {
 		public void onErrorResponse(VolleyError error) {
 			// TODO Auto-generated method stub
 			Log.d(TAG, "error" + error);
+			Util.toast(getApplicationContext(),
+					getString(R.string.toast_loc_search_error));
 			hideProgressLocationSearch();
 		};
 	};
-	private OnClickListener buttonClcClickListner = new OnClickListener() {
+	private OnClickListener imageButtonIlpClickListner = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			Util.toast(getApplicationContext(), "relocating..");
+
+			getMap().clear();
 			Employee emp = Util.getEmployee(getApplicationContext());
-			Location loc = Util.getLocation(emp.getLocation(),
-					Constants.LOCATIONS.TRIVANDRUM.ILP_CLC_BUILDING);
-			LatLng latLon = new LatLng(loc.getLat(), loc.getLon());
-			getMap().moveCamera(CameraUpdateFactory.newLatLng(latLon));
-			getMap().animateCamera(CameraUpdateFactory.zoomTo(18));
-			getMap().addMarker(new MarkerOptions().position(latLon));
+			List<ILPLocation> ilp_locs = Util.getLocations(emp.getLocation(),
+					Constants.LOCATIONS.TYPE.ILP);
+			if (ilp_locs.size() > 0) {
+				Util.toast(getApplicationContext(), "Locating you ILPs");
+				for (ILPLocation loc : ilp_locs) {
+					LatLng latLon = new LatLng(loc.getLat(), loc.getLon());
+					getMap().moveCamera(CameraUpdateFactory.newLatLng(latLon));
+					getMap().animateCamera(CameraUpdateFactory.zoomTo(15));
+					getMap().addMarker(
+							new MarkerOptions().position(latLon).title(
+									loc.getName()));
+
+				}
+			} else {
+				Util.toast(getApplicationContext(), "No ILPs found");
+			}
+		}
+	};
+	private OnClickListener imageButtonHostelClickListner = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+			getMap().clear();
+			Employee emp = Util.getEmployee(getApplicationContext());
+			List<ILPLocation> hotel_locs = Util.getLocations(emp.getLocation(),
+					Constants.LOCATIONS.TYPE.HOSTEL);
+			if (hotel_locs.size() > 0) {
+				Util.toast(getApplicationContext(), "Locating Hostels");
+				for (ILPLocation loc : hotel_locs) {
+					LatLng latLon = new LatLng(loc.getLat(), loc.getLon());
+					getMap().moveCamera(CameraUpdateFactory.newLatLng(latLon));
+					getMap().animateCamera(CameraUpdateFactory.zoomTo(15));
+					getMap().addMarker(
+							new MarkerOptions().position(latLon).title(
+									loc.getName()));
+
+				}
+			} else {
+				Util.toast(getApplicationContext(), "No hostels found");
+			}
+		}
+	};
+	private OnClickListener imageButtonMyLocationClickListner = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			Util.toast(getApplicationContext(), "Locating you");
+			getMap().clear();
+			getMyLocation();
 		}
 	};
 	private LocationListener locationListner = new LocationListener() {
@@ -159,27 +206,28 @@ public class LocationActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location);
-		imageButtonClc = (ImageButton) findViewById(R.id.imageButtonLocationIlp);
-		imageButtonClc.setOnClickListener(buttonClcClickListner);
-		imageButtonPp = (ImageButton) findViewById(R.id.imageButtonLocationPP);
+		imageButtonIlp = (ImageButton) findViewById(R.id.imageButtonLocationIlp);
+		imageButtonIlp.setOnClickListener(imageButtonIlpClickListner);
+		imageButtonMyLocation = (ImageButton) findViewById(R.id.imageButtonLocationMyLocation);
+		imageButtonMyLocation
+				.setOnClickListener(imageButtonMyLocationClickListner);
 		imageButtonHostel = (ImageButton) findViewById(R.id.imageButtonLocationHostel);
+		imageButtonHostel.setOnClickListener(imageButtonHostelClickListner);
 		imageButtonSearch = (ImageButton) findViewById(R.id.imageButtonLocationSearch);
 		imageButtonSearch.setOnClickListener(searchButtonClickListner);
+
 		editTextSearch = (EditText) findViewById(R.id.editTextLocationSearch);
 		progressBarSearchLocation = (ProgressBar) findViewById(R.id.progressBarLocationSearch);
 		if (!Util.isGooglePlayServicesAvailable(this)) {
 			finish();
 		}
-		// set to a default location depending on persons ILP
-		longitude = 76.880294;
-		latitude = 8.555145;
+		// set to a default ILP location depending on persons ILP
+		Employee emp = Util.getEmployee(getApplicationContext());
+		ILPLocation loc = Util.getLocations(emp.getLocation(),
+				Constants.LOCATIONS.TYPE.ILP).get(0);
+		longitude = loc.getLon();
+		latitude = loc.getLat();
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.location_menu, menu);
-		return true;
 	}
 
 	private GoogleMap getMap() {

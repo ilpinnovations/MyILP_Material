@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.ilp.ilpschedule.model.Contact;
 import com.ilp.ilpschedule.model.Feedback;
-import com.ilp.ilpschedule.model.Location;
+import com.ilp.ilpschedule.model.ILPLocation;
 import com.ilp.ilpschedule.model.Notification;
 import com.ilp.ilpschedule.model.Slot;
 
@@ -144,9 +144,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		return contacts;
 	}
 
-	public int addLocations(List<Location> locations) {
+	public int addLocations(List<ILPLocation> locations) {
 		int added = 0;
-		for (Location location : locations) {
+		for (ILPLocation location : locations) {
 			if (location != null && location.isValid()
 					&& addLocation(location) != -1)
 				added++;
@@ -154,7 +154,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return added;
 	}
 
-	public long addLocation(Location location) {
+	public long addLocation(ILPLocation location) {
 		long id;
 		ContentValues values = new ContentValues();
 		values.put(DbStructure.LocationTable.COLUMN_LAT, location.getLat());
@@ -168,15 +168,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		return id;
 	}
 
-	public List<Location> getLocations() {
-		ArrayList<Location> locations = new ArrayList<>();
+	public List<ILPLocation> getLocations() {
+		ArrayList<ILPLocation> locations = new ArrayList<>();
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor = db.query(DbStructure.LocationTable.TABLE_NAME, null,
 				null, null, null, null, null);
-		Location location;
+		ILPLocation location;
 		if (cursor.moveToFirst()) {
 			do {
-				location = new Location();
+				location = new ILPLocation();
 				location.setId(cursor.getLong(cursor
 						.getColumnIndexOrThrow(DbStructure.LocationTable._ID)));
 				location.setName(cursor.getString(cursor

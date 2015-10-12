@@ -2,11 +2,11 @@ package com.ilp.ilpschedule.model;
 
 import com.ilp.ilpschedule.util.Util;
 
-public class Location {
+public class ILPLocation {
 	private long id;
 	private String name;
 	private double lat, lon;
-	private String location;
+	private String location,type;
 
 	public long getId() {
 		return id;
@@ -56,6 +56,14 @@ public class Location {
 
 	public void setLon(double lon) {
 		this.lon = lon;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

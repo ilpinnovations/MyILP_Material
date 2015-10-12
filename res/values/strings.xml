@@ -26,7 +26,7 @@
     <!-- Menu -->
     <string name="action_refresh">Refresh</string>
     <string name="action_logout">Logout</string>
-    <string name="action_search">Search</string>
+    <string name="action_search">Search ATMs, Banks or Hospitals</string>
 
     <!-- Login Activity -->
     <string name="location">Location</string>
@@ -69,6 +69,7 @@
     <string name="toast_blank_lg">LG name cannot be empty</string>
     <string name="toast_error_connecting">Error connecting to server. Try again!</string>
     <string name="toast_reg_error">Fail to register. Try again!</string>
+    <string name="toast_loc_search_error">Error searching location. Try again!</string>
     <string name="toast_feedback_success">Feedback submitted successfully, Thank you</string>
     <string name="toast_feedback_fail">Feedback cannot be submitted, Try again!</string>
     <string name="toast_feedback_already">You already submitted feedback  got this session.</string>

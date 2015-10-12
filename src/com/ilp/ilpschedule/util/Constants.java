@@ -128,25 +128,28 @@ public interface Constants {
 	}
 
 	public interface LOCATIONS {
+		/**
+		 * types of locations
+		 */
+		public interface TYPE {
+			String ILP = "ILP";
+			String HOSTEL = "Hostel";
+		}
+
 		public interface TRIVANDRUM {
 			String LOC_NAME = "Trivandrum";
-			String ILP_PEEPAL_PARK = "Peepul Park";
-			String ILP_CLC_BUILDING = "TCS CLC Building";
 		}
 
 		public interface CHENNAI {
 			String LOC_NAME = "Chennai";
-			String ILP_LOC = "Chennai ILP";
 		}
 
 		public interface GUWAHATI {
 			String LOC_NAME = "Guwahati";
-			String ILP_LOC = "Guwahati ILP";
 		}
 
 		public interface HYDERABAD {
 			String LOC_NAME = "Hyderabad";
-			String ILP_LOC = "Hyderabad ILP";
 		}
 	}
 }

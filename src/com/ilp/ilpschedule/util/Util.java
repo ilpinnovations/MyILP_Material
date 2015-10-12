@@ -25,11 +25,11 @@ import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.ScheduleFragment;
 import com.ilp.ilpschedule.model.DrawerItem;
 import com.ilp.ilpschedule.model.Employee;
-import com.ilp.ilpschedule.model.Location;
+import com.ilp.ilpschedule.model.ILPLocation;
 
 public class Util {
 	private static final String TAG = "Util";
-	private static List<Location> locations;
+	private static List<ILPLocation> locations;
 
 	public static int saveEmployee(Context context, Employee emp) {
 		int empError = emp.isValid();
@@ -248,53 +248,60 @@ public class Util {
 			return R.drawable.badge_nobadge;
 	}
 
-	public static Location getLocation(String location, String name) {
-		for (Location loc : getLocations()) {
+	public static List<ILPLocation> getLocations(String location, String type) {
+		List<ILPLocation> locs = new ArrayList<ILPLocation>();
+		for (ILPLocation loc : getLocations()) {
 			if (loc.getLocation().equalsIgnoreCase(location)
-					&& loc.getName().equalsIgnoreCase(name))
-				return loc;
+					&& loc.getType().equalsIgnoreCase(type))
+				locs.add(loc);
 		}
-		return null;
+		return locs;
 	}
 
-	public static List<Location> getLocations() {
+	public static List<ILPLocation> getLocations() {
 		if (locations == null) {
 			locations = new ArrayList<>();
-			Location location;
-			location = new Location();
+			ILPLocation location;
+			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
 			location.setLat(8.5525038);
 			location.setLon(76.8800041);
-			location.setName(Constants.LOCATIONS.TRIVANDRUM.ILP_PEEPAL_PARK);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("Peepul park");
 			locations.add(location);
 
-			location = new Location();
+			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
 			location.setLat(8.555145);
 			location.setLon(76.880294);
-			location.setName(Constants.LOCATIONS.TRIVANDRUM.ILP_CLC_BUILDING);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("TCS CLC building");
 			locations.add(location);
 
-			location = new Location();
+			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.GUWAHATI.LOC_NAME);
 			location.setLat(26.150799);
 			location.setLon(91.790978);
-			location.setName(Constants.LOCATIONS.GUWAHATI.ILP_LOC);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("Guwahati ILP center");
 			locations.add(location);
 
-			location = new Location();
+			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.CHENNAI.LOC_NAME);
 			location.setLat(13.096596);
 			location.setLon(80.165716);
-			location.setName(Constants.LOCATIONS.CHENNAI.ILP_LOC);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("Chennai ILP center");
 			locations.add(location);
 
-			location = new Location();
+			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.HYDERABAD.LOC_NAME);
 			location.setLat(17.427160);
 			location.setLon(78.331661);
-			location.setName(Constants.LOCATIONS.HYDERABAD.ILP_LOC);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("Hyderabad ILP center");
 			locations.add(location);
+
 		}
 		return locations;
 	}
