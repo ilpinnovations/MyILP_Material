@@ -75,9 +75,14 @@ public class NotificationFragment extends Fragment {
 
 	@Override
 	public void onStart() {
-		if (notificationAdapter != null)
-			notificationAdapter.addData(new DbHelper(getActivity())
-					.getNotifications());
+		if (notificationAdapter != null) {
+			List<Notification> notifications = new DbHelper(getActivity())
+					.getNotifications();
+			if (notifications != null && notifications.size() > 0)
+				notificationAdapter.addData(notifications);
+			else
+				fetchNotifications();
+		}
 		super.onStart();
 	}
 

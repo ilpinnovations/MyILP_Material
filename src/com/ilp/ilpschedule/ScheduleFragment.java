@@ -144,61 +144,62 @@ public class ScheduleFragment extends Fragment {
 		return reqQueue;
 	}
 
-	private OnClickListener getScheduleClickListner = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Util.hideKeyboard(getActivity());
-			Util.showProgressDialog(getActivity());
-			if (isDataValid()) {
-				// check data in db then do n/w operation
-				String batch = editTextLgName.getText().toString().trim()
-						.toUpperCase(Locale.US);
-				List<Slot> schedule = new DbHelper(getActivity()).getSchedule(
-						date, batch);
-				if (schedule.size() == 0) {
-					// no data in db check for server
-					Log.d(TAG, "no data in db check for server");
-					if (Util.hasInternetAccess(getActivity())) {
-						Map<String, String> params = new HashMap<>();
-						params.put(Constants.NETWORK_PARAMS.SCHEDULE.BATCH,
-								batch);
-						params.put(Constants.NETWORK_PARAMS.SCHEDULE.DATE,
-								Constants.paramsDateFormat.format(date));
-						String url = new StringBuilder(
-								Constants.NETWORK_PARAMS.SCHEDULE.URL).append(
-								Util.getUrlEncodedString(params)).toString();
+	private void fetchSchedule() {
+		Util.hideKeyboard(getActivity());
+		if (isDataValid()) {
+			// check data in db then do n/w operation
+			String batch = editTextLgName.getText().toString().trim()
+					.toUpperCase(Locale.US);
+			List<Slot> schedule = new DbHelper(getActivity()).getSchedule(date,
+					batch);
+			if (schedule.size() == 0) {
+				// no data in db check for server
+				Log.d(TAG, "no data in db check for server");
+				if (Util.hasInternetAccess(getActivity())) {
+					Util.showProgressDialog(getActivity());
+					Map<String, String> params = new HashMap<>();
+					params.put(Constants.NETWORK_PARAMS.SCHEDULE.BATCH, batch);
+					params.put(Constants.NETWORK_PARAMS.SCHEDULE.DATE,
+							Constants.paramsDateFormat.format(date));
+					String url = new StringBuilder(
+							Constants.NETWORK_PARAMS.SCHEDULE.URL).append(
+							Util.getUrlEncodedString(params)).toString();
 
-						StringRequest request = new StringRequest(url,
-								schedulerTaskSuccessListner,
-								schedulerTaskErrorListner);
-						request.setTag(1);
-						getRequestQueue().cancelAll(1);
-						getRequestQueue().add(request);
-					} else {
-						Util.toast(getActivity().getApplicationContext(),
-								getString(R.string.toast_no_internet));
-						Util.hideProgressDialog(getActivity());
-					}
+					StringRequest request = new StringRequest(url,
+							schedulerTaskSuccessListner,
+							schedulerTaskErrorListner);
+					request.setTag(1);
+					getRequestQueue().cancelAll(1);
+					getRequestQueue().add(request);
 				} else {
-					// we got some data from db
-					Log.d(TAG, "we got some data from db");
-					((ScheduleAdapter) listViewSchedule.getAdapter())
-							.setData(schedule);
+					Util.toast(getActivity().getApplicationContext(),
+							getString(R.string.toast_no_internet));
 					Util.hideProgressDialog(getActivity());
 				}
 			} else {
-				Util.toast(getActivity().getApplicationContext(),
-						getString(R.string.toast_blank_lg));
-				Util.hideProgressDialog(getActivity());
+				// we got some data from db
+				Log.d(TAG, "we got some data from db");
+				((ScheduleAdapter) listViewSchedule.getAdapter())
+						.setData(schedule);
 			}
+		} else {
+			Util.toast(getActivity().getApplicationContext(),
+					getString(R.string.toast_blank_lg));
+			Util.hideProgressDialog(getActivity());
+		}
+	}
 
+	private OnClickListener getScheduleClickListner = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			fetchSchedule();
 		}
 	};
 
 	public ScheduleFragment() {
 		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH)+1;
+		int month = cal.get(Calendar.MONTH) + 1;
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		String dateStr = String.valueOf(year)
 				+ "-"
@@ -274,9 +275,14 @@ public class ScheduleFragment extends Fragment {
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+		fetchSchedule();
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-
 		ArrayList<Slot> values = scheduleAdapter.getData();
 		outState.putParcelableArrayList("schedules", values);
 		outState.putString("lgName", lgName);

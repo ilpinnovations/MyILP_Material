@@ -49,10 +49,16 @@ public class ContactFragment extends Fragment {
 		@Override
 		public void onClick(View view) {
 			ContactViewHolder cvh = (ContactViewHolder) view.getTag();
-			Intent intent = new Intent(Intent.ACTION_DIAL);
-			intent.setData(Uri.parse("tel:"
+			Intent intentCall = new Intent(Intent.ACTION_CALL);
+			Intent intentSend = new Intent(Intent.ACTION_SEND);
+			intentCall.setData(Uri.parse("tel:"
 					+ cvh.getTextViewNumber().getText().toString()));
-			startActivity(intent);
+			intentSend.setData(Uri.parse("sms:"
+					+ cvh.getTextViewNumber().getText().toString()));
+			Intent chooser = Intent.createChooser(intentCall, "Contact via..");
+			chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {
+					intentSend, intentCall });
+			startActivity(chooser);
 		}
 	};
 	private Listener<String> fetchContactSuccessListner = new Listener<String>() {
@@ -152,8 +158,13 @@ public class ContactFragment extends Fragment {
 
 	@Override
 	public void onStart() {
-		if (contactAdapter != null)
-			contactAdapter.addData(new DbHelper(getActivity()).getContacts());
+		if (contactAdapter != null) {
+			List<Contact> contacts = new DbHelper(getActivity()).getContacts();
+			if (contacts != null && contacts.size() > 0)
+				contactAdapter.addData(contacts);
+			else
+				fetchContacts();
+		}
 		super.onStart();
 	}
 

@@ -69,7 +69,9 @@ public class Employee {
 		if (getEmail() == null || getEmail().trim().length() == 0) {
 			return Constants.EMP_ERRORS.EMAIL.BLANK;
 		}
-		if (!android.util.Patterns.EMAIL_ADDRESS.matcher(getEmail()).matches()) {
+		if (!getEmail().trim().endsWith("@tcs.com")
+				|| !android.util.Patterns.EMAIL_ADDRESS.matcher(getEmail())
+						.matches()) {
 			return Constants.EMP_ERRORS.EMAIL.INVALID;
 		}
 		if (getBatch() == null || getBatch().trim().length() == 0) {

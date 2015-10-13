@@ -33,10 +33,13 @@
     <string name="login">Login</string>
     <string name="send">Send</string>
     <string name="welcomeToILP">Welcome to My ILP</string>
-
+    
+    <!-- Labels -->
+    <string name="label_rating">Rating</string>
+    
     <!-- Hints -->
     <string name="hint_name">Firstname Lastname</string>
-    <string name="hint_email">Email</string>
+    <string name="hint_email">Email (Official)</string>
     <string name="hint_employeeId">Employee ID</string>
     <string name="hint_batch">Batch</string>
     <string name="hint_faculty">Faculty</string>

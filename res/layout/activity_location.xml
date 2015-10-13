@@ -69,7 +69,7 @@
             android:layout_margin="@dimen/margin_low"
             android:background="@drawable/btn_loc"
             android:padding="@dimen/padding_normal"
-            android:src="@drawable/ic_my_location" />
+            android:src="@drawable/ic_myloc" />
 
         <ImageButton
             android:id="@+id/imageButtonLocationIlp"
@@ -78,7 +78,7 @@
             android:layout_margin="@dimen/margin_low"
             android:background="@drawable/btn_loc"
             android:padding="@dimen/padding_normal"
-            android:src="@drawable/ic_myilp" />
+            android:src="@drawable/ic_ilp" />
 
         <ImageButton
             android:id="@+id/imageButtonLocationHostel"
