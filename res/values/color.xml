@@ -17,8 +17,10 @@
     <!-- contact list color sets -->
     <color name="color_set_a">#F44336</color>
     <color name="color_set_b">#9C27B0</color>
-    <color name="color_set_c">#FF5722</color>
-    <color name="color_set_d">#2196F3</color>
+    <color name="color_set_c">#009688</color>
+    <color name="color_set_d">#FF5722</color>
+    <color name="color_set_e">#009688</color>
+    <color name="color_set_f">#2196F3</color>
 
     <!-- Loc button -->
     <color name="color_loc_btn">#fdfdfd</color>

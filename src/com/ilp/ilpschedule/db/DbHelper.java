@@ -19,7 +19,7 @@ import com.ilp.ilpschedule.model.Slot;
 
 public class DbHelper extends SQLiteOpenHelper {
 	public static final String TAG = "DbHelper";
-	private static int DB_VERSION = 5;
+	private static int DB_VERSION = 6;
 	private static String DB_NAME = "myilpschedule.db";
 
 	public DbHelper(Context context) {

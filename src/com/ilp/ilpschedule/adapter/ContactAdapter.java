@@ -58,7 +58,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 				String.valueOf(contact.getTitle().toUpperCase(Locale.US)
 						.charAt(0)));
 		int color_set = R.drawable.contact_icon_set_a;
-		switch (position % 4) {
+		switch (position % 6) {
 		case 0:
 			color_set = R.drawable.contact_icon_set_a;
 			break;
@@ -71,6 +71,13 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 		case 3:
 			color_set = R.drawable.contact_icon_set_d;
 			break;
+		case 4:
+			color_set = R.drawable.contact_icon_set_e;
+			break;
+		case 5:
+			color_set = R.drawable.contact_icon_set_f;
+			break;
+
 		}
 		cvh.getTextViewIcon().setBackgroundResource(color_set);
 		convertView.setOnClickListener(callbackListner);

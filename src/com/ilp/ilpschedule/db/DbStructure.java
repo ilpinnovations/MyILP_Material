@@ -73,6 +73,7 @@ public class DbStructure {
 				.append(DbConstants.COMMA).append(DbConstants.UNIQUE)
 				.append(DbConstants.BRACES_OPEN).append(COLUMN_DATE)
 				.append(DbConstants.COMMA).append(COLUMN_SLOT)
+				.append(DbConstants.COMMA).append(COLUMN_BATCH)
 				.append(DbConstants.BRACES_CLOSE)
 				.append(DbConstants.BRACES_CLOSE).toString();
 		public static final String COMMAND_DROP = new StringBuilder(
