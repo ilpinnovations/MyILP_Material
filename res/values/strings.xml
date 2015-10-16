@@ -27,18 +27,19 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_logout">Logout</string>
     <string name="action_search">Search</string>
+    <string name="action_help">Help</string>
 
     <!-- Login Activity -->
     <string name="location">Location</string>
     <string name="login">Login</string>
     <string name="send">Send</string>
     <string name="welcomeToILP">Welcome to My ILP</string>
-    
+
     <!-- Labels -->
     <string name="label_rating">Rating</string>
-    
+
     <!-- Hints -->
-    <string name="hint_name">Firstname Lastname</string>
+    <string name="hint_name">Name</string>
     <string name="hint_email">Email (Official)</string>
     <string name="hint_employeeId">Employee ID</string>
     <string name="hint_batch">Batch</string>
@@ -70,6 +71,11 @@
     <string name="toast_no_internet">No Internet connection</string>
     <string name="toast_no_schedule">No schedule available</string>
     <string name="toast_blank_lg">LG name cannot be empty</string>
+    <string name="toast_invalid_lg">Invalid LG name</string>
+    <string name="toast_schedule_help">Click on slot to submit feedback</string>
+    <string name="toast_badge_help">Submit feedback to gain points</string>
+    <string name="toast_contact_help">Click on contact to call or message</string>
+    <string name="toast_notification_help">Refresh to update notifications</string>
     <string name="toast_error_connecting">Error connecting to server. Try again!</string>
     <string name="toast_reg_error">Fail to register. Try again!</string>
     <string name="toast_loc_search_error">Error searching location. Try again!</string>
@@ -81,7 +87,8 @@
         <item name="trivandrum">Trivandrum</item>
         <item name="chennai">Chennai</item>
         <item name="guwahati">Guwahati</item>
-        <item name="hydrabad">Hydrabad</item>
+        <item name="ahmedabad">Ahmedabad</item>
+        <item name="hydrabad">Hyderabad</item>
     </string-array>
 
     <!-- Drawer option -->
@@ -91,4 +98,7 @@
     <string name="drawer_options_locations">Locations</string>
     <string name="drawer_options_contacts">Emergency Contacts</string>
 
+    <string name="default_text_feedback_count">Total feedbacks: 0</string>
+    <string name="default_text_feedback_avg">Average rating: NA</string>
+    
 </resources>

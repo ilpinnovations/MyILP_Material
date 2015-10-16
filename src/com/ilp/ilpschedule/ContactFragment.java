@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,16 +51,8 @@ public class ContactFragment extends Fragment {
 		@Override
 		public void onClick(View view) {
 			ContactViewHolder cvh = (ContactViewHolder) view.getTag();
-			Intent intentCall = new Intent(Intent.ACTION_CALL);
-			Intent intentSend = new Intent(Intent.ACTION_SEND);
-			intentCall.setData(Uri.parse("tel:"
-					+ cvh.getTextViewNumber().getText().toString()));
-			intentSend.setData(Uri.parse("sms:"
-					+ cvh.getTextViewNumber().getText().toString()));
-			Intent chooser = Intent.createChooser(intentCall, "Contact via..");
-			chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {
-					intentSend, intentCall });
-			startActivity(chooser);
+			buildAlertToContact(cvh.getTextViewTitle().getText().toString(),
+					cvh.getTextViewNumber().getText().toString());
 		}
 	};
 	private Listener<String> fetchContactSuccessListner = new Listener<String>() {
@@ -141,6 +135,10 @@ public class ContactFragment extends Fragment {
 			fetchContacts();
 			return true;
 		}
+		else if(id==R.id.action_contact_help){
+			Util.toast(getActivity(), getString(R.string.toast_contact_help));
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -181,5 +179,32 @@ public class ContactFragment extends Fragment {
 		} else {
 			Util.toast(getActivity(), getString(R.string.toast_no_internet));
 		}
+	}
+
+	private void buildAlertToContact(String title, final String number) {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(
+				getActivity());
+		builder.setMessage("Contact " + title + "\n" + number + " through")
+				.setCancelable(true)
+				.setPositiveButton("Call",
+						new DialogInterface.OnClickListener() {
+							public void onClick(final DialogInterface dialog,
+									final int id) {
+								Intent intent = new Intent(Intent.ACTION_CALL);
+								intent.setData(Uri.parse("tel:" + number));
+								startActivity(intent);
+							}
+						})
+				.setNegativeButton("Message",
+						new DialogInterface.OnClickListener() {
+							public void onClick(final DialogInterface dialog,
+									final int id) {
+								Intent intent = new Intent(Intent.ACTION_SENDTO);
+								intent.setData(Uri.parse("smsto:" + number));
+								startActivity(intent);
+							}
+						});
+		final AlertDialog alert = builder.create();
+		alert.show();
 	}
 }

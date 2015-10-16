@@ -78,15 +78,6 @@
                 android:padding="@dimen/padding_normal" />
 
             <EditText
-                android:id="@+id/editTextLoginBatch"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_low"
-                android:ems="10"
-                android:hint="@string/hint_batch"
-                android:padding="@dimen/padding_normal" />
-
-            <EditText
                 android:id="@+id/editTextLoginLg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

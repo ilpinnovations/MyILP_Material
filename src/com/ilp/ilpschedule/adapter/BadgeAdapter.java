@@ -52,7 +52,7 @@ public class BadgeAdapter extends ArrayAdapter<Badge> {
 				context.getString(R.string.badge_item_points)
 						+ badge.getPoints());
 		bvh.getImageViewBadge().setImageResource(
-				Util.getBatchByPoints(badge.getPoints()));
+				Util.getBadgeByPoints(badge.getPoints()));
 		return convertView;
 	}
 

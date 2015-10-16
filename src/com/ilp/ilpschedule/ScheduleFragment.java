@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +20,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -66,6 +71,7 @@ public class ScheduleFragment extends Fragment {
 			textViewdate.setText(dateFormat.format(date));
 		}
 	};
+
 	private OnClickListener dateChangeClickListner = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -112,15 +118,17 @@ public class ScheduleFragment extends Fragment {
 										.toUpperCase(Locale.US)));
 					} else {
 						// no schdule
-						Util.toast(getActivity().getApplicationContext(),
-								getString(R.string.toast_no_schedule));
+						if (getActivity() != null)
+							Util.toast(getActivity().getApplicationContext(),
+									getString(R.string.toast_no_schedule));
 					}
 				}
 
 			} catch (JSONException ex) {
 				Log.d(TAG, ex.getLocalizedMessage());
 			} finally {
-				Util.hideProgressDialog(getActivity());
+				if (getActivity() != null)
+					Util.hideProgressDialog(getActivity());
 			}
 			Log.d(TAG, response);
 		}
@@ -144,9 +152,36 @@ public class ScheduleFragment extends Fragment {
 		return reqQueue;
 	}
 
-	private void fetchSchedule() {
-		Util.hideKeyboard(getActivity());
+	private void fetchScheduleFromServer() {
+		String batch = editTextLgName.getText().toString().trim()
+				.toUpperCase(Locale.US);
 		if (isDataValid()) {
+			if (Util.hasInternetAccess(getActivity())) {
+				Util.showProgressDialog(getActivity());
+				Map<String, String> params = new HashMap<>();
+				params.put(Constants.NETWORK_PARAMS.SCHEDULE.BATCH, batch);
+				params.put(Constants.NETWORK_PARAMS.SCHEDULE.DATE,
+						Constants.paramsDateFormat.format(date));
+				String url = new StringBuilder(
+						Constants.NETWORK_PARAMS.SCHEDULE.URL).append(
+						Util.getUrlEncodedString(params)).toString();
+
+				StringRequest request = new StringRequest(url,
+						schedulerTaskSuccessListner, schedulerTaskErrorListner);
+				request.setTag(1);
+				getRequestQueue().cancelAll(1);
+				getRequestQueue().add(request);
+			} else {
+				Util.toast(getActivity().getApplicationContext(),
+						getString(R.string.toast_no_internet));
+				Util.hideProgressDialog(getActivity());
+			}
+		}
+	}
+
+	private void fetchSchedule() {
+		if (isDataValid()) {
+			Util.hideKeyboard(getActivity());
 			// check data in db then do n/w operation
 			String batch = editTextLgName.getText().toString().trim()
 					.toUpperCase(Locale.US);
@@ -155,37 +190,13 @@ public class ScheduleFragment extends Fragment {
 			if (schedule.size() == 0) {
 				// no data in db check for server
 				Log.d(TAG, "no data in db check for server");
-				if (Util.hasInternetAccess(getActivity())) {
-					Util.showProgressDialog(getActivity());
-					Map<String, String> params = new HashMap<>();
-					params.put(Constants.NETWORK_PARAMS.SCHEDULE.BATCH, batch);
-					params.put(Constants.NETWORK_PARAMS.SCHEDULE.DATE,
-							Constants.paramsDateFormat.format(date));
-					String url = new StringBuilder(
-							Constants.NETWORK_PARAMS.SCHEDULE.URL).append(
-							Util.getUrlEncodedString(params)).toString();
-
-					StringRequest request = new StringRequest(url,
-							schedulerTaskSuccessListner,
-							schedulerTaskErrorListner);
-					request.setTag(1);
-					getRequestQueue().cancelAll(1);
-					getRequestQueue().add(request);
-				} else {
-					Util.toast(getActivity().getApplicationContext(),
-							getString(R.string.toast_no_internet));
-					Util.hideProgressDialog(getActivity());
-				}
+				fetchScheduleFromServer();
 			} else {
 				// we got some data from db
 				Log.d(TAG, "we got some data from db");
 				((ScheduleAdapter) listViewSchedule.getAdapter())
 						.setData(schedule);
 			}
-		} else {
-			Util.toast(getActivity().getApplicationContext(),
-					getString(R.string.toast_blank_lg));
-			Util.hideProgressDialog(getActivity());
 		}
 	}
 
@@ -236,7 +247,8 @@ public class ScheduleFragment extends Fragment {
 		if (scheduleAdapter == null)
 			scheduleAdapter = new ScheduleAdapter(getActivity(),
 					new ArrayList<Slot>(),
-					((MainActivity) getActivity()).getScheduleClickListner());
+					((MainActivity) getActivity())
+							.getScheduleItemClickListner());
 
 		listViewSchedule = (ListView) rootView
 				.findViewById(R.id.listViewSchedule);
@@ -252,18 +264,45 @@ public class ScheduleFragment extends Fragment {
 		}
 		textViewdate.setText(dateFormat.format(date));
 		editTextLgName.setText(lgName);
+		setHasOptionsMenu(true);
 		return rootView;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.schedule_menu, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_schedule_refresh) {
+			fetchScheduleFromServer();
+			return true;
+		} else if (id == R.id.action_schedule_help) {
+			Util.toast(getActivity(), getString(R.string.toast_schedule_help));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private boolean isDataValid() {
 		Log.d(TAG, "cheking data");
 		if (date != null
 				&& editTextLgName.getText().toString().trim().length() > 0) {
+			Pattern pattern = Pattern.compile("[^a-z0-9]",
+					Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(editTextLgName.getText()
+					.toString().trim());
+			if (matcher.find()) {
+				Util.toast(getActivity().getApplicationContext(),
+						getString(R.string.toast_invalid_lg));
+				return false;
+			}
 			return true;
 		} else {
 			Util.toast(getActivity().getApplicationContext(),
 					getString(R.string.toast_blank_lg));
-
 			return false;
 		}
 	}
@@ -288,4 +327,5 @@ public class ScheduleFragment extends Fragment {
 		outState.putString("lgName", lgName);
 		outState.putLong("date", date.getTime());
 	}
+
 }

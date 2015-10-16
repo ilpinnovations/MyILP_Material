@@ -40,6 +40,71 @@ public class BadgeFragment extends Fragment {
 	private ImageView imageViewBadge;
 	private BadgeAdapter badgeAdapter;
 	private ListView listViewBadges;
+
+	private void setMyBadges(int point) {
+		if (point >= 100) {
+			imageViewBadge.setImageResource(R.drawable.badge_karma_king);
+			textViewBadgeMyPoint.setText(new StringBuilder(
+					getString(R.string.badge_karma_king))
+					.append(Constants.SPACE).append(point)
+					.append(Constants.SPACE)
+					.append(getString(R.string.badge_points)).toString());
+
+		} else if (point >= 60) {
+			imageViewBadge.setImageResource(R.drawable.badge_karma_leader);
+			textViewBadgeMyPoint.setText(new StringBuilder(
+					getString(R.string.badge_karma_leader))
+					.append(Constants.SPACE).append(point)
+					.append(Constants.SPACE)
+					.append(getString(R.string.badge_points)).toString());
+
+			textViewBadgeDesc
+					.setText(new StringBuilder(
+							getString(R.string.badge_you_need))
+							.append(Constants.SPACE).append(100 - point)
+							.append(Constants.SPACE)
+							.append(getString(R.string.badge_more_for_king))
+							.toString());
+		} else if (point >= 30) {
+			imageViewBadge.setImageResource(R.drawable.badge_karma_empower);
+			textViewBadgeMyPoint.setText(new StringBuilder(
+					getString(R.string.badge_karma_empower))
+					.append(Constants.SPACE).append(point)
+					.append(Constants.SPACE)
+					.append(getString(R.string.badge_points)).toString());
+
+			textViewBadgeDesc.setText(new StringBuilder(
+					getString(R.string.badge_you_need)).append(Constants.SPACE)
+					.append(60 - point).append(Constants.SPACE)
+					.append(getString(R.string.badge_more_for_leader))
+					.toString());
+		} else if (point >= 15) {
+			imageViewBadge.setImageResource(R.drawable.badge_karma_warrior);
+			textViewBadgeMyPoint.setText(new StringBuilder(
+					getString(R.string.badge_karma_warrior))
+					.append(Constants.SPACE).append(point)
+					.append(Constants.SPACE)
+					.append(getString(R.string.badge_points)).toString());
+			textViewBadgeDesc.setText(new StringBuilder(
+					getString(R.string.badge_you_need)).append(Constants.SPACE)
+					.append(30 - point).append(Constants.SPACE)
+					.append(getString(R.string.badge_more_for_empower))
+					.toString());
+
+		} else {
+			imageViewBadge.setImageResource(R.drawable.badge_nobadge);
+			textViewBadgeMyPoint.setText(new StringBuilder(
+					getString(R.string.badge_you_earn)).append(Constants.SPACE)
+					.append(point).append(Constants.SPACE)
+					.append(getString(R.string.badge_points)).toString());
+			textViewBadgeDesc.setText(new StringBuilder(
+					getString(R.string.badge_you_need)).append(Constants.SPACE)
+					.append(15 - point).append(Constants.SPACE)
+					.append(getString(R.string.badge_more_for_warrior))
+					.toString());
+		}
+	}
+
 	private Listener<String> fetchBadgesSuccessListner = new Listener<String>() {
 
 		@Override
@@ -58,109 +123,17 @@ public class BadgeFragment extends Fragment {
 							jobj = jarr.getJSONObject(i);
 							if (jobj.has("emp_id")) {
 								badge = new Badge();
-								if (jobj.has("emp_name"))
-									badge.setName(jobj.getString("emp_name"));
-								if (jobj.has("count"))
-									badge.setPoints(jobj.getInt("count"));
-								if (jobj.getLong("emp_id") == emp.getEmpId()) {
-									int count = badge.getPoints();
-
-									if (count >= 100) {
-										imageViewBadge
-												.setImageResource(R.drawable.badge_karma_king);
-										textViewBadgeMyPoint
-												.setText(new StringBuilder(
-														getString(R.string.badge_karma_king))
-														.append(Constants.SPACE)
-														.append(count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_points))
-														.toString());
-
-									} else if (count >= 60) {
-										imageViewBadge
-												.setImageResource(R.drawable.badge_karma_leader);
-										textViewBadgeMyPoint
-												.setText(new StringBuilder(
-														getString(R.string.badge_karma_leader))
-														.append(Constants.SPACE)
-														.append(count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_points))
-														.toString());
-
-										textViewBadgeDesc
-												.setText(new StringBuilder(
-														getString(R.string.badge_you_need))
-														.append(Constants.SPACE)
-														.append(100 - count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_more_for_king))
-														.toString());
-									} else if (count >= 30) {
-										imageViewBadge
-												.setImageResource(R.drawable.badge_karma_empower);
-										textViewBadgeMyPoint
-												.setText(new StringBuilder(
-														getString(R.string.badge_karma_empower))
-														.append(Constants.SPACE)
-														.append(count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_points))
-														.toString());
-
-										textViewBadgeDesc
-												.setText(new StringBuilder(
-														getString(R.string.badge_you_need))
-														.append(Constants.SPACE)
-														.append(60 - count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_more_for_leader))
-														.toString());
-									} else if (count >= 15) {
-										imageViewBadge
-												.setImageResource(R.drawable.badge_karma_warrior);
-										textViewBadgeMyPoint
-												.setText(new StringBuilder(
-														getString(R.string.badge_karma_warrior))
-														.append(Constants.SPACE)
-														.append(count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_points))
-														.toString());
-										textViewBadgeDesc
-												.setText(new StringBuilder(
-														getString(R.string.badge_you_need))
-														.append(Constants.SPACE)
-														.append(30 - count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_more_for_empower))
-														.toString());
-
-									} else {
-										imageViewBadge
-												.setImageResource(R.drawable.badge_nobadge);
-										textViewBadgeMyPoint
-												.setText(new StringBuilder(
-														getString(R.string.badge_you_earn))
-														.append(Constants.SPACE)
-														.append(count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_points))
-														.toString());
-										textViewBadgeDesc
-												.setText(new StringBuilder(
-														getString(R.string.badge_you_need))
-														.append(Constants.SPACE)
-														.append(15 - count)
-														.append(Constants.SPACE)
-														.append(getString(R.string.badge_more_for_warrior))
-														.toString());
-									}
+								badge.setName(jobj.optString("emp_name"));
+								badge.setPoints(jobj.optInt("count"));
+								if (jobj.optLong("emp_id") == emp.getEmpId()) {
+									int points = badge.getPoints();
+									Util.saveMyPoints(getActivity(), points);
+									setMyBadges(points);
 								}
 								badges.add(badge);
 							}
 						}
+
 					}
 				}
 				Log.d(TAG, badges.toString());
@@ -219,6 +192,9 @@ public class BadgeFragment extends Fragment {
 		if (id == R.id.action_badge_refresh) {
 			fetchBadges();
 			return true;
+		} else if (id == R.id.action_badge_help) {
+			Util.toast(getActivity(), getString(R.string.toast_badge_help));
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -228,6 +204,12 @@ public class BadgeFragment extends Fragment {
 		getActivity().setTitle(R.string.title_badges);
 		fetchBadges();
 		super.onResume();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		setMyBadges(Util.getMyPoints(getActivity()));
 	}
 
 	private RequestQueue getReqQue() {

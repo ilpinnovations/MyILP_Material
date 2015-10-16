@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ilp.ilpschedule.R;
 import com.ilp.ilpschedule.model.Slot;
 import com.ilp.ilpschedule.model.SlotViewHolder;
+import com.ilp.ilpschedule.util.Util;
 
 public class ScheduleAdapter extends ArrayAdapter<Slot> {
 	private Context context;
@@ -55,6 +57,13 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 
 			svh.setSlotContent((TextView) convertView
 					.findViewById(R.id.textViewSlotContent));
+			svh.getSlotContent().setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Util.toast(context, "Slot "
+							+ ((Button) v).getText().toString());
+				}
+			});
 
 			svh.setCourseContent((TextView) convertView
 					.findViewById(R.id.textViewCourseContent));
@@ -64,14 +73,22 @@ public class ScheduleAdapter extends ArrayAdapter<Slot> {
 
 			svh.setRoomContent((TextView) convertView
 					.findViewById(R.id.textViewRoomContent));
+			svh.getRoomContent().setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Util.toast(context, ((TextView) v).getText().toString());
+				}
+			});
 			convertView.setTag(svh);
 		}
 
 		Slot s = data.get(position);
 		svh = (SlotViewHolder) convertView.getTag();
-		svh.getSlotContent().setText("Slot " + s.getSlot());
-		svh.getRoomContent().setText(s.getRoom());
+		svh.getSlotContent().setText("Slot "+s.getSlot());
+		svh.getRoomContent().setText("Room " + s.getRoom());
 		svh.getCourseContent().setText(s.getCourse());
+
 		svh.getFacultyContent().setText(s.getFaculty());
 		svh.setId(s.getId());
 		convertView.setOnClickListener(callbackListner);

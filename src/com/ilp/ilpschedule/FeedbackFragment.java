@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -35,7 +37,9 @@ import com.ilp.ilpschedule.util.Util;
 public class FeedbackFragment extends Fragment {
 	public static final String TAG = "com.tcs.myilp.FeedbackFragment";
 
-	private EditText editTextFaculty, editTextCourse, editTextComment;
+	private EditText editTextComment;
+	private TextView textViewFeedbackFaculty, textViewFeedbackCourse,
+			textViewFeedbackCount, textViewFeedbackAvg;
 	private ImageButton imageButtonFeedbackSend;
 	private RatingBar ratingBarFeedback;
 	private long slot_id;
@@ -58,51 +62,52 @@ public class FeedbackFragment extends Fragment {
 					if (Util.hasInternetAccess(getActivity())) {
 						final Feedback finalfeedback = dbh.getFeedback(id);
 						StringRequest request = new StringRequest(
-								Request.Method.POST, Constants.URL_FEEDBACK,
-								feedbackTaskSuccessListner,
-								feedbackTaskErrorListner) {
+								Request.Method.POST,
+								Constants.URL_FEEDBACK_SUBMIT,
+								feedbackSubmitTaskSuccessListner,
+								feedbackSubmitTaskErrorListner) {
 							@Override
 							protected java.util.Map<String, String> getParams()
 									throws com.android.volley.AuthFailureError {
 								Map<String, String> params = new HashMap<String, String>();
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.COMMENT,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.COMMENT,
 										editTextComment.getText().toString()
 												.trim());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.RATE,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.RATE,
 										String.valueOf(ratingBarFeedback
 												.getRating()));
 								DbHelper dbh = new DbHelper(getActivity());
 								Slot s = dbh
 										.getSlot(finalfeedback.getSlot_id());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.FACULTY,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.FACULTY,
 										s.getFaculty());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.COURSE,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.COURSE,
 										s.getCourse());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.SLOT,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.SLOT,
 										s.getSlot());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.DATE,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.DATE,
 										Constants.paramsDateFormat.format(s
 												.getDate()));
 
 								Employee employee = Util
 										.getEmployee(getActivity());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.EMP_ID,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.EMP_ID,
 										String.valueOf(employee.getEmpId()));
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.EMP_NAME,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.EMP_NAME,
 										employee.getName());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.EMP_LOC,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.EMP_LOC,
 										employee.getLocation());
 								params.put(
-										Constants.NETWORK_PARAMS.FEEDBACK.EMP_BATCH,
+										Constants.NETWORK_PARAMS.FEEDBACK_SUBMIT.EMP_BATCH,
 										employee.getLg());
 								return params;
 							};
@@ -126,7 +131,7 @@ public class FeedbackFragment extends Fragment {
 			}
 		}
 	};
-	private Response.Listener<String> feedbackTaskSuccessListner = new Response.Listener<String>() {
+	private Listener<String> feedbackSubmitTaskSuccessListner = new Listener<String>() {
 		@Override
 		public void onResponse(String response) {
 			boolean result = false;
@@ -163,7 +168,7 @@ public class FeedbackFragment extends Fragment {
 			Log.d(TAG, response);
 		}
 	};
-	private Response.ErrorListener feedbackTaskErrorListner = new Response.ErrorListener() {
+	private ErrorListener feedbackSubmitTaskErrorListner = new ErrorListener() {
 
 		@Override
 		public void onErrorResponse(VolleyError error) {
@@ -173,6 +178,44 @@ public class FeedbackFragment extends Fragment {
 			Util.hideProgressDialog(getActivity());
 		}
 
+	};
+	private Listener<String> feedbackSummaryTaskSuccessListner = new Listener<String>() {
+
+		@Override
+		public void onResponse(String result) {
+			Log.d(TAG, "result=>>" + result);
+			try {
+				JSONObject obj = new JSONObject(result);
+				JSONArray jarr = obj.optJSONArray("Android");
+				obj = jarr.optJSONObject(0);
+				if (obj.has("count"))
+					textViewFeedbackCount.setText("Total feedbacks: "
+							+ obj.optString("count"));
+				else
+					textViewFeedbackCount.setText("No feedback");
+				if (obj.has("avg_count"))
+					textViewFeedbackAvg.setText("Average rating: "
+							+ obj.optString("avg_count"));
+				else
+					textViewFeedbackAvg.setText("-NA-");
+			} catch (Exception ex) {
+				Log.d(TAG,
+						"error parsing summary data" + ex.getLocalizedMessage());
+			} finally {
+				Util.hideProgressDialog(getActivity());
+			}
+		}
+
+	};
+	private ErrorListener feedbackSummaryTaskErrorListner = new ErrorListener() {
+
+		@Override
+		public void onErrorResponse(VolleyError error) {
+			Log.d(TAG, "error=>>" + error);
+			Util.toast(getActivity(),
+					getString(R.string.toast_error_connecting));
+			Util.hideProgressDialog(getActivity());
+		}
 	};
 
 	private RequestQueue getRequestQueue() {
@@ -187,11 +230,11 @@ public class FeedbackFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_feedback, container,
 				false);
 
-		editTextCourse = (EditText) rootView
-				.findViewById(R.id.editTextFeedbackCourse);
+		textViewFeedbackCourse = (TextView) rootView
+				.findViewById(R.id.textViewFeedbackCourse);
 
-		editTextFaculty = (EditText) rootView
-				.findViewById(R.id.editTextFeedbackFaculty);
+		textViewFeedbackFaculty = (TextView) rootView
+				.findViewById(R.id.textViewFeedbackFaculty);
 
 		imageButtonFeedbackSend = (ImageButton) rootView
 				.findViewById(R.id.imageButtonFeedbackSend);
@@ -204,26 +247,79 @@ public class FeedbackFragment extends Fragment {
 		editTextComment = (EditText) rootView
 				.findViewById(R.id.editTextFeedbackComment);
 
+		textViewFeedbackCount = (TextView) rootView
+				.findViewById(R.id.textViewFeedbackCount);
+		textViewFeedbackAvg = (TextView) rootView
+				.findViewById(R.id.textViewFeedbackAvg);
 		return rootView;
+	}
+
+	private void switchView(boolean forFaculty) {
+		if (forFaculty) {
+			editTextComment.setVisibility(View.GONE);
+			ratingBarFeedback.setVisibility(View.GONE);
+			imageButtonFeedbackSend.setVisibility(View.GONE);
+			textViewFeedbackCount.setVisibility(View.VISIBLE);
+			textViewFeedbackAvg.setVisibility(View.VISIBLE);
+		} else {
+			editTextComment.setVisibility(View.VISIBLE);
+			ratingBarFeedback.setVisibility(View.VISIBLE);
+			imageButtonFeedbackSend.setVisibility(View.VISIBLE);
+			textViewFeedbackCount.setVisibility(View.GONE);
+			textViewFeedbackAvg.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
 	public void onStart() {
-		editTextFaculty.setText((String) bundle
-				.get(Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.FACULTY));
-		editTextCourse.setText((String) bundle
-				.get(Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.COURSE));
-		slot_id = (Long) bundle
-				.get(Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.SLOT_ID);
+		String faculty = bundle.getString(
+				Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.FACULTY, "NA");
+		String course = bundle.getString(
+				Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.COURSE, "NA");
+		slot_id = bundle.getLong(
+				Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.SLOT_ID, -1);
+
+		textViewFeedbackFaculty.setText(faculty);
+		textViewFeedbackCourse.setText(course);
 		DbHelper dbh = new DbHelper(getActivity());
-		Feedback feedback = dbh.getFeedbackBySlotId(slot_id);
-		editTextComment.setText("");
-		ratingBarFeedback.setRating(1.0f);
-		if (feedback != null) {
-			if (feedback.getComment() != null)
-				editTextComment.setText(feedback.getComment());
-			if (feedback.getRating() > 0) {
-				ratingBarFeedback.setRating(feedback.getRating());
+		if (bundle.getBoolean(
+				Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.IS_FACULTY, false)) {
+
+			switchView(true);
+			if (Util.hasInternetAccess(getActivity())) {
+				Util.showProgressDialog(getActivity());
+				Slot slot = dbh.getSlot(slot_id);
+				// network request is required
+				Map<String, String> params = new HashMap<>();
+				params.put(Constants.NETWORK_PARAMS.FEEDBACK_SUMMARY.FACULTY,
+						faculty);
+				params.put(Constants.NETWORK_PARAMS.FEEDBACK_SUMMARY.SLOT,
+						slot.getSlot());
+				params.put(Constants.NETWORK_PARAMS.FEEDBACK_SUMMARY.DATE,
+						Constants.paramsDateFormat.format(slot.getDate()));
+				params.put(Constants.NETWORK_PARAMS.FEEDBACK_SUMMARY.COURSE,
+						course);
+				Log.d(TAG, params.toString());
+				StringRequest request = new StringRequest(
+						Constants.URL_FEEDBACK_SUMMARY
+								+ Util.getUrlEncodedString(params),
+						feedbackSummaryTaskSuccessListner,
+						feedbackSummaryTaskErrorListner);
+				getRequestQueue().add(request);
+			} else {
+				Util.toast(getActivity(), getString(R.string.toast_no_internet));
+			}
+		} else {
+			switchView(false);
+			editTextComment.setText("");
+			ratingBarFeedback.setRating(1.0f);
+			Feedback feedback = dbh.getFeedbackBySlotId(slot_id);
+			if (feedback != null) {
+				if (feedback.getComment() != null)
+					editTextComment.setText(feedback.getComment());
+				if (feedback.getRating() > 0) {
+					ratingBarFeedback.setRating(feedback.getRating());
+				}
 			}
 		}
 		super.onStart();
@@ -242,5 +338,5 @@ public class FeedbackFragment extends Fragment {
 	public void setData(Bundle bundle) {
 		this.bundle = bundle;
 	}
-	
+
 }

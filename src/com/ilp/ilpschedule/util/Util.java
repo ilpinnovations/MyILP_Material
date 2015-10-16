@@ -40,7 +40,6 @@ public class Util {
 					.putLong(Constants.PREF_KEYS.EMP_ID, emp.getEmpId())
 					.putString(Constants.PREF_KEYS.EMP_NAME, emp.getName())
 					.putString(Constants.PREF_KEYS.EMP_EMAIL, emp.getEmail())
-					.putString(Constants.PREF_KEYS.EMP_BATCH, emp.getBatch())
 					.putString(Constants.PREF_KEYS.EMP_LG, emp.getLg())
 					.putString(Constants.PREF_KEYS.EMP_LOCATION,
 							emp.getLocation()).commit();
@@ -54,10 +53,9 @@ public class Util {
 		SharedPreferences spf = context.getSharedPreferences(
 				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
 		Employee emp = new Employee();
-
 		emp.setEmpId(spf.getLong(Constants.PREF_KEYS.EMP_ID, -1));
 		emp.setName(spf.getString(Constants.PREF_KEYS.EMP_NAME, null));
-		emp.setBatch(spf.getString(Constants.PREF_KEYS.EMP_BATCH, null));
+
 		emp.setEmail(spf.getString(Constants.PREF_KEYS.EMP_EMAIL, null));
 		emp.setLg(spf.getString(Constants.PREF_KEYS.EMP_LG, null));
 		emp.setLocation(spf.getString(Constants.PREF_KEYS.EMP_LOCATION, null));
@@ -80,7 +78,7 @@ public class Util {
 			msg = "Email cannot be blank";
 			break;
 		case Constants.EMP_ERRORS.EMAIL.INVALID:
-			msg = "Invalid email";
+			msg = "Invalid email address";
 			break;
 		case Constants.EMP_ERRORS.BATCH.BLANK:
 			msg = "Batch cannot be blank";
@@ -92,7 +90,7 @@ public class Util {
 			msg = "Employee ID cannot be blank";
 			break;
 		case Constants.EMP_ERRORS.EMP_ID.INVALID:
-			msg = "Invalid employee Id";
+			msg = "Invalid employee ID";
 			break;
 		case Constants.EMP_ERRORS.LOCATION.BLANK:
 			msg = "Location cannot be blank";
@@ -149,8 +147,10 @@ public class Util {
 	public static void hideKeyboard(Activity activity) {
 		InputMethodManager imm = (InputMethodManager) activity
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(
-				activity.getCurrentFocus().getWindowToken(), 0);
+		if (imm != null && activity != null
+				&& activity.getCurrentFocus() != null)
+			imm.hideSoftInputFromWindow(activity.getCurrentFocus()
+					.getWindowToken(), 0);
 	}
 
 	public static boolean hasInternetAccess(Context applicationContext) {
@@ -182,6 +182,13 @@ public class Util {
 			progressDialog.setCancelable(false);
 		}
 		return progressDialog;
+	}
+
+	public static void updateProgessDialog(Activity activity) {
+		progressDialog = new ProgressDialog(activity);
+		progressDialog.setOwnerActivity(activity);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
 	}
 
 	public static void showProgressDialog(Activity activity) {
@@ -235,7 +242,7 @@ public class Util {
 		return strb.toString();
 	}
 
-	public static int getBatchByPoints(int count) {
+	public static int getBadgeByPoints(int count) {
 		if (count >= 15 && count < 30)
 			return R.drawable.badge_karma_warrior;
 		else if (count >= 30 && count < 60)
@@ -261,6 +268,7 @@ public class Util {
 	public static List<ILPLocation> getLocations() {
 		if (locations == null) {
 			locations = new ArrayList<>();
+
 			ILPLocation location;
 			location = new ILPLocation();
 			location.setLocation(Constants.LOCATIONS.TRIVANDRUM.LOC_NAME);
@@ -318,6 +326,14 @@ public class Util {
 			location.setName("Peepul Park Hostel TCS");
 			locations.add(location);
 
+			location = new ILPLocation();
+			location.setLocation(Constants.LOCATIONS.AHMEDABAD.LOC_NAME);
+			location.setLat(8.551389);
+			location.setLon(76.879763);
+			location.setType(Constants.LOCATIONS.TYPE.ILP);
+			location.setName("TCS Ahmedabad ILP");
+			locations.add(location);
+
 		}
 		return locations;
 	}
@@ -342,6 +358,41 @@ public class Util {
 		} else {
 			GooglePlayServicesUtil.getErrorDialog(status, activity, 0).show();
 			return false;
+		}
+	}
+
+	public static void saveMyPoints(Context context, int points) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		spf.edit().putInt(Constants.PREF_KEYS.BADGE_POINTS, points).commit();
+	}
+
+	public static int getMyPoints(Context context) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		return spf.getInt(Constants.PREF_KEYS.BADGE_POINTS, 0);
+	}
+
+	public static String getRegId(Context context) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		return spf.getString(Constants.PREF_KEYS.GCM_REG_ID, null);
+	}
+
+	public static void saveRegId(Context context, String regId) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		spf.edit().putString(Constants.PREF_KEYS.GCM_REG_ID, regId).commit();
+	}
+
+	public static void clearPref(Context context) {
+		SharedPreferences spf = context.getSharedPreferences(
+				Constants.PREF_FILE_NAME, Context.MODE_PRIVATE);
+		String regId = spf.getString(Constants.PREF_KEYS.GCM_REG_ID, null);
+		spf.edit().clear().commit();
+		if (regId != null) {
+			spf.edit().putString(Constants.PREF_KEYS.GCM_REG_ID, regId)
+					.commit();
 		}
 	}
 }

@@ -31,8 +31,7 @@ public class LoginActivity extends ActionBarActivity {
 	public static final String TAG = "com.ilp.schedule.LoginActivity";
 	private Toolbar toolbar;
 	private Spinner locationSpinner;
-	private EditText editTextName, editTextEmail, editTextEmpId, editTextBatch,
-			editTextLg;
+	private EditText editTextName, editTextEmail, editTextEmpId, editTextLg;
 	private GoogleCloudMessaging gcm;
 	/**
 	 * Simple {@link ArrayAdapter} of type {@link String}
@@ -60,7 +59,7 @@ public class LoginActivity extends ActionBarActivity {
 		editTextName = (EditText) findViewById(R.id.editTextLoginName);
 		editTextEmail = (EditText) findViewById(R.id.editTextLoginEmail);
 		editTextEmpId = (EditText) findViewById(R.id.editTextLoginEmployeeId);
-		editTextBatch = (EditText) findViewById(R.id.editTextLoginBatch);
+
 		editTextLg = (EditText) findViewById(R.id.editTextLoginLg);
 		setSupportActionBar(toolbar);
 		locationSpinner = ((Spinner) findViewById(R.id.spinnerLoginLocation));
@@ -83,41 +82,50 @@ public class LoginActivity extends ActionBarActivity {
 	}
 
 	public void login(View view) {
+
 		if (Util.hasInternetAccess(getApplicationContext())) {
-			Util.showProgressDialog(this);
 			Employee emp = new Employee();
-			String tmp = editTextEmpId.getText().toString();
+			String tmp = editTextEmpId.getText().toString().trim();
 			long empId = -1;
-			if (tmp != null && tmp.trim().length() > 0) {
-				empId = Long.parseLong(tmp);
+			if (tmp != null && tmp.length() > 0) {
+				try {
+					empId = Long.parseLong(tmp);
+					// edit text set to type number can
+					// have only digits but still to be on safe side we put it
+					// into try catch
+				} catch (Exception ex) {
+					// invalid emp id
+				}
 				emp.setEmpId(empId);
 			}
-			emp.setName(editTextName.getText().toString()
+			emp.setName(editTextName.getText().toString().trim()
 					.toUpperCase(Locale.US));
-			emp.setBatch(editTextBatch.getText().toString()
+			emp.setLg(editTextLg.getText().toString().trim()
 					.toUpperCase(Locale.US));
-			emp.setLg(editTextLg.getText().toString().toUpperCase(Locale.US));
-			emp.setEmail(editTextEmail.getText().toString());
+			emp.setEmail(editTextEmail.getText().toString().trim());
 			emp.setLocation((String) locationSpinner.getSelectedItem());
-
-			int saveError = Util.saveEmployee(getApplicationContext(), emp);
-			if (saveError == Constants.EMP_ERRORS.NO_ERROR) {
+			int errorId = Util.saveEmployee(getApplicationContext(), emp);
+			if (errorId == Constants.EMP_ERRORS.NO_ERROR) {
+				Util.showProgressDialog(this);
 				TelephonyManager tManager = (TelephonyManager) getBaseContext()
 						.getSystemService(Context.TELEPHONY_SERVICE);
 				String imei = tManager.getDeviceId();
 				Map<String, String> params = new HashMap<>();
-				params.put("name", emp.getName());
-				params.put("email", emp.getEmail());
-				params.put("id", String.valueOf(emp.getEmpId()));
-				params.put("loc", emp.getLocation());
-				params.put("batch", emp.getLg());
-				params.put("imei", imei);
+				params.put(Constants.NETWORK_PARAMS.REGISTER.NAME,
+						emp.getName());
+				params.put(Constants.NETWORK_PARAMS.REGISTER.EMIAL,
+						emp.getEmail());
+				params.put(Constants.NETWORK_PARAMS.REGISTER.EMP_ID,
+						String.valueOf(emp.getEmpId()));
+				params.put(Constants.NETWORK_PARAMS.REGISTER.LOCATION,
+						emp.getLocation());
+				params.put(Constants.NETWORK_PARAMS.REGISTER.BATCH, emp.getLg());
+				params.put(Constants.NETWORK_PARAMS.REGISTER.IMEI, imei);
 				RegisterAsyncTask rat = new RegisterAsyncTask(params);
 				rat.execute();
 			} else {
-				Util.toast(getApplicationContext(), Util.getErrorMsg(saveError));
+				Util.toast(getApplicationContext(), Util.getErrorMsg(errorId));
 			}
-
 		} else {
 			Util.toast(getApplicationContext(),
 					getString(R.string.toast_no_internet));
@@ -178,7 +186,13 @@ public class LoginActivity extends ActionBarActivity {
 			int MAX_ATTEMPTS = 4;
 			int BACKOFF_MILLI_SECONDS = 1000;
 			try {
-				regId = getGcm().register(Constants.GOOGLE_SENDER_ID);
+				regId = Util.getRegId(getApplicationContext());
+				if (regId == null) {
+					regId = getGcm().register(Constants.GOOGLE_SENDER_ID);
+					Util.saveRegId(getApplicationContext(), regId);
+				} else {
+					Log.d(TAG, "device registered with gcm already ");
+				}
 				if (regId != null && regId.trim().length() > 0) {
 					publishProgress(true);
 					// register with app server ilp server
@@ -224,8 +238,6 @@ public class LoginActivity extends ActionBarActivity {
 		@Override
 		protected void onProgressUpdate(Boolean... values) {
 			if (values[0]) {
-				Util.saveGcmRegistrationId(getApplicationContext(), regId);
-				Log.d(TAG, "registeration with google done" + regId);
 				Util.doLogin(getApplicationContext());
 			} else {
 				Log.d(TAG, "fail to register with google try again");

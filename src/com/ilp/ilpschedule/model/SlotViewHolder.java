@@ -3,7 +3,8 @@ package com.ilp.ilpschedule.model;
 import android.widget.TextView;
 
 public class SlotViewHolder {
-	private TextView slotContent, courseContent, facultyContent, roomContent;
+	private TextView courseContent, facultyContent, roomContent;
+	private TextView slotContent;
 	private long id;
 
 	public TextView getSlotContent() {

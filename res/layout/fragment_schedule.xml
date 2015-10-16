@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="@dimen/padding_high"
-            android:text="10-Jan-2015"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
@@ -43,10 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="LG Name"
-            android:padding="@dimen/padding_high" >
-
-            <requestFocus />
+            android:hint="@string/hint_lg"
+            android:padding="@dimen/padding_high"
+            android:singleLine="true" >
         </EditText>
 
         <ImageButton

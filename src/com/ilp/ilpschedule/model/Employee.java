@@ -1,10 +1,13 @@
 package com.ilp.ilpschedule.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.ilp.ilpschedule.util.Constants;
 
 public class Employee {
 	private long empId;
-	private String location, batch, email, name, lg;
+	private String location, email, name, lg;
 
 	public Employee() {
 
@@ -26,14 +29,6 @@ public class Employee {
 		this.location = location;
 	}
 
-	public String getBatch() {
-		return batch;
-	}
-
-	public void setBatch(String batch) {
-		this.batch = batch;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -50,37 +45,41 @@ public class Employee {
 		this.name = name;
 	}
 
-	public Employee(int empId, String name, String email, String batch,
-			String location) {
+	public Employee(int empId, String name, String email, String location) {
 		this.empId = empId;
 		this.location = location;
-		this.batch = batch;
+
 		this.email = email;
 		this.name = name;
 	}
 
 	public int isValid() {
+		Pattern hasSpace = Pattern.compile("\\s");
+		Matcher matcher;
 		if (getEmpId() < 1) {
 			return Constants.EMP_ERRORS.EMP_ID.BLANK;
 		}
-		if (getName() == null || getName().trim().length() == 0) {
+		if (getName() == null || getName().length() == 0) {
 			return Constants.EMP_ERRORS.NAME.BLANK;
 		}
-		if (getEmail() == null || getEmail().trim().length() == 0) {
+		if (getEmail() == null || getEmail().length() == 0) {
 			return Constants.EMP_ERRORS.EMAIL.BLANK;
 		}
-		if (!getEmail().trim().endsWith("@tcs.com")
+		if (!getEmail().endsWith("@tcs.com")
 				|| !android.util.Patterns.EMAIL_ADDRESS.matcher(getEmail())
 						.matches()) {
 			return Constants.EMP_ERRORS.EMAIL.INVALID;
 		}
-		if (getBatch() == null || getBatch().trim().length() == 0) {
-			return Constants.EMP_ERRORS.BATCH.BLANK;
-		}
-		if (getLg() == null || getLg().trim().length() == 0) {
+
+		if (getLg() == null || getLg().length() == 0) {
 			return Constants.EMP_ERRORS.EMP_LG.BLANK;
 		}
-		if (getLocation() == null || getLocation().trim().length() == 0) {
+		matcher = hasSpace.matcher(getLg());
+		if (matcher.matches()) {
+			return Constants.EMP_ERRORS.EMP_LG.INVALID;
+		}
+
+		if (getLocation() == null || getLocation().length() == 0) {
 			return Constants.EMP_ERRORS.LOCATION.BLANK;
 		}
 		return Constants.EMP_ERRORS.NO_ERROR;

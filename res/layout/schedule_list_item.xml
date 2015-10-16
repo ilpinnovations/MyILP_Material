@@ -3,72 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_low"
-    android:background="@drawable/map_search"
+    android:background="@drawable/schedule_list_item"
     android:orientation="vertical"
-    android:padding="@dimen/padding_low" >
+    android:padding="@dimen/padding_normal" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textViewSlotTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slot_item_slot"
-            android:textColor="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/textViewSlotContent"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Slot A"
-            android:textColor="@color/colorText" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textViewCourseTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slot_item_course"
-            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewCourseContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Javascript n all"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorText" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textViewFacultyTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slot_item_faculty"
-            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewFacultyContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:gravity="left"
             android:text="Sridevi D V"
             android:textColor="@color/colorText" />
     </LinearLayout>
@@ -78,21 +36,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margin_low"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textViewRoomTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slot_item_room"
-            android:textColor="@color/colorAccent" />
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/textViewRoomContent"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="CR5"
-            android:textColor="@color/colorText" />
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:text="CR5" />
+
+        <TextView
+            android:id="@+id/textViewSlotContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:text="Slot A" />
     </LinearLayout>
 
 </LinearLayout>

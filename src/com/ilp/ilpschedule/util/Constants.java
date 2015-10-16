@@ -10,7 +10,8 @@ public interface Constants {
 	String URL_NOTIFICATION = URL_BASE + "notify_json.php";
 	String URL_SCHEDULE = URL_BASE + "schedulelist_json.php";
 	String URL_CONTACTS = URL_BASE + "getEmergencyContacts.php?";
-	String URL_FEEDBACK = URL_BASE + "feedback_json.php";
+	String URL_FEEDBACK_SUBMIT = URL_BASE + "feedback_json.php";
+	String URL_FEEDBACK_SUMMARY = URL_BASE + "faculty_json.php?";
 	String URL_REGISTER = URL_BASE + "register.php";
 	String URL_GOOGLE_MAP_SEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 
@@ -34,6 +35,7 @@ public interface Constants {
 		String EMP_LG = "key_lg";
 		String IS_LOGIN = "is_login";
 		String GCM_REG_ID = "gcm_reg_id";
+		String BADGE_POINTS = "my_points";
 	}
 
 	public interface EMP_ERRORS {
@@ -93,7 +95,14 @@ public interface Constants {
 			String BATCH = "batch";
 		}
 
-		public interface FEEDBACK {
+		public interface FEEDBACK_SUMMARY {
+			String FACULTY = "faculty";
+			String COURSE = "course";
+			String SLOT = "slot";
+			String DATE = "date";
+		}
+
+		public interface FEEDBACK_SUBMIT {
 			String FACULTY = "faculty";
 			String COURSE = "course";
 			String COMMENT = "comment";
@@ -113,6 +122,15 @@ public interface Constants {
 			String TYPES = "types";
 			String SENSOR = "sensor";
 		}
+
+		public interface REGISTER {
+			String IMEI = "imei";
+			String NAME = "name";
+			String EMIAL = "email";
+			String EMP_ID = "empid";
+			String LOCATION = "loc";
+			String BATCH = "batch";
+		}
 	}
 
 	public interface BUNDLE_KEYS {
@@ -120,6 +138,7 @@ public interface Constants {
 			String FACULTY = "faculty";
 			String COURSE = "course";
 			String SLOT_ID = "slot_id";
+			String IS_FACULTY = "is_faculty";
 		}
 	}
 
@@ -150,6 +169,10 @@ public interface Constants {
 
 		public interface HYDERABAD {
 			String LOC_NAME = "Hyderabad";
+		}
+
+		public interface AHMEDABAD {
+			String LOC_NAME = "Ahmedabad";
 		}
 	}
 }

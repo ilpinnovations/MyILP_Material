@@ -63,6 +63,9 @@ public class NotificationFragment extends Fragment {
 		if (id == R.id.action_notification_refresh) {
 			fetchNotifications();
 			return true;
+		}else if(id ==R.id.action_notification_help){
+			Util.toast(getActivity(), getString(R.string.toast_notification_help));
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

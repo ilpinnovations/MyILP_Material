@@ -40,12 +40,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ilp.ilpschedule.model.Employee;
 import com.ilp.ilpschedule.model.ILPLocation;
@@ -60,7 +57,7 @@ public class LocationActivity extends ActionBarActivity implements
 	private GoogleMap map;
 	private LocationManager locationManager;
 	private ImageButton imageButtonIlp, imageButtonMyLocation,
-			imageButtonHostel, imageButtonSearch;
+			imageButtonHostel, imageButtonSearch, imageButtonLocationNavigate;
 	private ProgressBar progressBarSearchLocation;
 	private EditText editTextSearch;
 	private double latitude = 0;
@@ -68,6 +65,20 @@ public class LocationActivity extends ActionBarActivity implements
 	private RequestQueue reqQue;
 	private int PROXIMITY_RADIUS = 5000;
 	private LocationRequest locationRequest;
+	private GoogleApiClient googleApiClient;
+	private LatLng touchedPointOnMap;
+	private OnClickListener navigateButtonClickListner = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			if (touchedPointOnMap != null)
+				fireNavigationIntent(touchedPointOnMap.longitude,
+						touchedPointOnMap.latitude);
+			else
+				Util.toast(getApplicationContext(),
+						"Touch a point on map to enable navigation");
+		}
+	};
 	private Listener<String> searchPlacesSuccessListner = new Listener<String>() {
 		public void onResponse(String result) {
 			if (Util.checkString(result)) {
@@ -87,7 +98,6 @@ public class LocationActivity extends ActionBarActivity implements
 
 		@Override
 		public void onErrorResponse(VolleyError error) {
-			// TODO Auto-generated method stub
 			Log.d(TAG, "error" + error);
 			Util.toast(getApplicationContext(),
 					getString(R.string.toast_loc_search_error));
@@ -98,7 +108,7 @@ public class LocationActivity extends ActionBarActivity implements
 		@Override
 		public void onClick(View v) {
 
-			getMap().clear();
+			clear();
 			Employee emp = Util.getEmployee(getApplicationContext());
 			List<ILPLocation> ilp_locs = Util.getLocations(emp.getLocation(),
 					Constants.LOCATIONS.TYPE.ILP);
@@ -127,7 +137,7 @@ public class LocationActivity extends ActionBarActivity implements
 		@Override
 		public void onClick(View v) {
 
-			getMap().clear();
+			clear();
 			Employee emp = Util.getEmployee(getApplicationContext());
 			List<ILPLocation> hotel_locs = Util.getLocations(emp.getLocation(),
 					Constants.LOCATIONS.TYPE.HOSTEL);
@@ -156,7 +166,7 @@ public class LocationActivity extends ActionBarActivity implements
 		@Override
 		public void onClick(View v) {
 			Util.toast(getApplicationContext(), "Locating you");
-			getMap().clear();
+			clear();
 		}
 	};
 	private LocationListener locationListner = new LocationListener() {
@@ -197,24 +207,6 @@ public class LocationActivity extends ActionBarActivity implements
 		}
 	}
 
-	private OnMarkerDragListener touchedMapMarkerDragListner = new OnMarkerDragListener() {
-
-		@Override
-		public void onMarkerDragStart(Marker marker) {
-
-		}
-
-		@Override
-		public void onMarkerDragEnd(Marker marker) {
-			new GetAddressAsyncTask().execute(getMap(), marker.getPosition());
-		}
-
-		@Override
-		public void onMarkerDrag(Marker marker) {
-
-		}
-	};
-
 	private void fireNavigationIntent(double lon, double lat) {
 		Uri intentUri = Uri.parse("google.navigation:q=" + lon + "," + lat
 				+ "&mode=d");
@@ -222,32 +214,27 @@ public class LocationActivity extends ActionBarActivity implements
 		startActivity(intent);
 	}
 
-	private OnMarkerClickListener markerClickListner = new OnMarkerClickListener() {
-
-		@Override
-		public boolean onMarkerClick(Marker marker) {
-			if (marker.getTitle().equalsIgnoreCase("Navigate to this place")) {
-				fireNavigationIntent(marker.getPosition().longitude,
-						marker.getPosition().latitude);
-			}
-			return false;
-		}
-
-	};
 	private OnMapClickListener mapClickListner = new OnMapClickListener() {
 
 		@Override
 		public void onMapClick(LatLng latLng) {
-			getMap().clear();
-			touchedMapMarkerOptions = new MarkerOptions()
-					.position(latLng)
-					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.ic_navigate))
+			clear();
+			touchedMapMarkerOptions = new MarkerOptions().position(latLng)
 					.draggable(true).title("Navigate to this place");
 			getMap().addMarker(touchedMapMarkerOptions);
-			getMap().setOnMarkerClickListener(markerClickListner);
+			touchedPointOnMap = latLng;
+			imageButtonLocationNavigate
+					.setImageResource(R.drawable.ic_navigate);
+			imageButtonLocationNavigate.setEnabled(true);
 		}
 	};
+
+	private void clear() {
+		getMap().clear();
+		imageButtonLocationNavigate
+				.setImageResource(R.drawable.ic_navigate_inactive);
+		touchedPointOnMap = null;
+	}
 
 	private void showProgressLocationSearch() {
 		progressBarSearchLocation.setVisibility(View.VISIBLE);
@@ -294,8 +281,6 @@ public class LocationActivity extends ActionBarActivity implements
 		}
 	};
 
-	private GoogleApiClient googleApiClient;
-
 	protected synchronized void buildGoogleApiClient() {
 		googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
 				.addConnectionCallbacks(this)
@@ -327,15 +312,22 @@ public class LocationActivity extends ActionBarActivity implements
 		imageButtonSearch = (ImageButton) findViewById(R.id.imageButtonLocationSearch);
 		imageButtonSearch.setOnClickListener(searchButtonClickListner);
 
+		imageButtonLocationNavigate = (ImageButton) findViewById(R.id.imageButtonLocationNavigate);
+		imageButtonLocationNavigate
+				.setOnClickListener(navigateButtonClickListner);
+
 		editTextSearch = (EditText) findViewById(R.id.editTextLocationSearch);
 		progressBarSearchLocation = (ProgressBar) findViewById(R.id.progressBarLocationSearch);
 
 		// set to a default ILP location depending on persons ILP
 		Employee emp = Util.getEmployee(getApplicationContext());
-		ILPLocation loc = Util.getLocations(emp.getLocation(),
-				Constants.LOCATIONS.TYPE.ILP).get(0);
-		longitude = loc.getLon();
-		latitude = loc.getLat();
+		List<ILPLocation> locs = Util.getLocations(emp.getLocation(),
+				Constants.LOCATIONS.TYPE.ILP);
+		if (locs.size() > 0) {
+			ILPLocation loc = locs.get(0);
+			longitude = loc.getLon();
+			latitude = loc.getLat();
+		}
 	}
 
 	private GoogleMap getMap() {
@@ -434,17 +426,17 @@ public class LocationActivity extends ActionBarActivity implements
 			LatLng latLng = new LatLng(latitude, longitude);
 			getMap().moveCamera(CameraUpdateFactory.newLatLng(latLng));
 			getMap().animateCamera(CameraUpdateFactory.zoomTo(15));
-			Util.toast(getApplicationContext(), "got last location");
+			//Util.toast(getApplicationContext(), "got last location");
 		} else {
-			Util.toast(getApplicationContext(), "no last location");
+			//Util.toast(getApplicationContext(), "no last location");
 		}
-		Util.toast(getApplicationContext(), "requesting for location updates");
+		//Util.toast(getApplicationContext(), "requesting for location updates");
 		RequestLocationUpdates();
 	}
 
 	@Override
 	public void onConnectionSuspended(int arg0) {
-		Util.toast(getApplicationContext(), "gapi connection suspended");
+		//Util.toast(getApplicationContext(), "gapi connection suspended");
 	}
 
 	@Override

@@ -88,8 +88,6 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 					.setText(emp.getEmail());
 			((TextView) convertView.findViewById(R.id.textViewLocation))
 					.setText(emp.getLocation());
-			((TextView) convertView.findViewById(R.id.textViewBatch))
-					.setText(emp.getBatch());
 			((TextView) convertView.findViewById(R.id.textViewEmpId))
 					.setText(String.valueOf(emp.getEmpId()));
 			((TextView) convertView.findViewById(R.id.textViewLgName))

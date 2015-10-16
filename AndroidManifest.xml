@@ -33,9 +33,11 @@
     <permission
         android:name="com.example.googlemaps.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-    
+
     <!-- For ILP server -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <!-- for GCM -->
     <!--

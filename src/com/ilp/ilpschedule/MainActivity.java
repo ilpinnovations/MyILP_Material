@@ -2,7 +2,6 @@ package com.ilp.ilpschedule;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +16,7 @@ import android.widget.ListView;
 
 import com.ilp.ilpschedule.adapter.DrawerAdapter;
 import com.ilp.ilpschedule.model.DrawerItemViewHolder;
+import com.ilp.ilpschedule.model.Employee;
 import com.ilp.ilpschedule.model.SlotViewHolder;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
@@ -46,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
 		} else {
 			currentTitle = savedInstanceState.getString("title");
 		}
+
 		if (toolbar == null) {
 			toolbar = (Toolbar) findViewById(R.id.toolbar);
 			setSupportActionBar(toolbar);
@@ -66,16 +67,19 @@ public class MainActivity extends ActionBarActivity {
 					toolbar, R.string.opne, R.string.close) {
 				@Override
 				public void onDrawerClosed(View drawerView) {
-					setTitle(currentTitle);
+					if (getTitle().toString().equalsIgnoreCase(
+							getString(R.string.app_name)))
+						setTitle(currentTitle);
 					super.onDrawerClosed(drawerView);
 				}
 
 				@Override
 				public void onDrawerOpened(View drawerView) {
-
+					currentTitle = getTitle().toString();
 					setTitle(R.string.app_name);
 					super.onDrawerOpened(drawerView);
 				}
+
 			};
 		}
 		drawerLayout.setDrawerListener(drawerToggler);
@@ -93,6 +97,7 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_logout) {
+
 			logout();
 			return true;
 		}
@@ -152,17 +157,26 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void setTitle(CharSequence title) {
-		currentTitle = title.toString();
 		super.setTitle(title);
 	}
 
-	public OnClickListener getScheduleClickListner() {
+	public OnClickListener getScheduleItemClickListner() {
 		if (scheduleItemClickListner == null) {
 			scheduleItemClickListner = new OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					Employee emp = Util.getEmployee(getApplicationContext());
 					SlotViewHolder svh = (SlotViewHolder) view.getTag();
+					String emp_id = svh.getFacultyContent().getText()
+							.toString().replaceAll("[^0-9]", "");
 					Bundle bundle = new Bundle();
+					if (emp_id != null && emp_id.trim().length() > 0) {
+						if (Integer.parseInt(emp_id) == emp.getEmpId()) {
+							bundle.putBoolean(
+									Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.IS_FACULTY,
+									true);
+						}
+					}
 					bundle.putCharSequence(
 							Constants.BUNDLE_KEYS.FEEDBACK_FRAGMENT.FACULTY,
 							svh.getFacultyContent().getText());
@@ -195,8 +209,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private void logout() {
-		getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE)
-				.edit().clear().commit();
+		Util.clearPref(getApplicationContext());
 		startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 		finish();
 	}
