@@ -33,6 +33,13 @@ import com.ilp.ilpschedule.model.Employee;
 import com.ilp.ilpschedule.util.Constants;
 import com.ilp.ilpschedule.util.Util;
 
+/**
+ * {@link BadgeFragment} is a {@link Fragment} that manages the actions of
+ * related to {@link Badge} model
+ * 
+ * @author Zeeshan Khan
+ * 
+ */
 public class BadgeFragment extends Fragment {
 	public static final String TAG = "com.tcs.myilp.BadgeFragment";
 	private RequestQueue reqQue;
